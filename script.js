@@ -1,5 +1,5 @@
 // Google Sheet থেকে ডাটা আনা
-const sheetURL = "https://docs.google.com/spreadsheets/d/1Euf6Rz-fRAjtzVj7aEoxmzxLA7vrfOuAvNjfo-ctDf0/gviz/tq?tqx=out:json";
+const sheetURL = "https://docs.google.com/spreadsheets/d/1Euf6Rz-fRAjtzVj7aEoxmzxLA7vrfOuAvNjfo-ctDf0/edit?usp=sharing";
 
 async function loadProducts() {
   try {
