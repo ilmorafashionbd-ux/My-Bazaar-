@@ -1,61 +1,95 @@
-// Google Sheet থেকে ডাটা আনা
-const sheetURL = "https://docs.google.com/spreadsheets/d/1Euf6Rz-fRAjtzVj7aEoxmzxLA7vrfOuAvNjfo-ctDf0/edit?usp=sharing";
+/**************** CONFIG ****************/
+// Google Sheet CSV Link
+const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvJSc-B0_uG9Yt1QOMq6Kcq0ccW4dbztEFeRXUYqZIIWvVQWhG4NrcHXB4WBq-5G2JXHRuz7lpbDGK/pub?gid=0&single=true&output=csv";
 
-async function loadProducts() {
+// GitHub Image Base Path
+const imageBaseURL = "https://ilmorafashionbd-ux.github.io/My-Shop/images/";
+
+// WhatsApp Number
+const WHATSAPP = "8801778095805";
+
+/**************** STATE ****************/
+let PRODUCTS = [];
+
+/**************** UTILS ****************/
+const el = sel => document.querySelector(sel);
+const fmt = n => '৳' + (Number(n) || 0).toLocaleString('bn-BD');
+const safe = v => v == null ? '' : String(v);
+
+function setYear() {
+  const y1 = el('#yr');
+  if (y1) y1.textContent = new Date().getFullYear();
+}
+
+function setStatus(msg, ok = true) {
+  const s = el('#status');
+  if (!s) return;
+  s.textContent = msg;
+  s.style.background = ok ? '#0b1424' : '#3b0a0a';
+}
+
+/**************** FETCH CSV ****************/
+async function fetchProducts() {
+  const res = await fetch(DATA_URL);
+  const text = await res.text();
+  const rows = text.trim().split("\n").map(r => r.split(","));
+
+  const header = rows[0].map(h => h.trim().toLowerCase());
+  const nameIdx = header.indexOf("name");
+  const priceIdx = header.indexOf("price");
+  const descIdx = header.indexOf("description");
+  const imgIdx = header.indexOf("image");
+
+  const list = [];
+  for (let r = 1; r < rows.length; r++) {
+    const row = rows[r];
+    const name = safe(row[nameIdx]);
+    const price = safe(row[priceIdx]);
+    const desc = safe(row[descIdx]);
+    const imgFile = safe(row[imgIdx]);
+
+    if (!name || !price || !imgFile) continue;
+
+    list.push({
+      id: r,
+      title: name,
+      price: Number(price),
+      desc: desc,
+      img: imageBaseURL + imgFile
+    });
+  }
+  return list;
+}
+
+/**************** RENDER ****************/
+function renderGrid() {
+  const grid = el('#grid'); if (!grid) return;
+  const q = (el('#search')?.value || '').trim().toLowerCase();
+
+  let list = PRODUCTS.filter(p => (q === '' || p.title.toLowerCase().includes(q) || (p.desc || '').toLowerCase().includes(q)));
+
+  grid.innerHTML = list.map(p => `
+    <article class="card">
+      <img class="card-img" loading="lazy" src="${p.img}" alt="${p.title}" />
+      <div class="card-body">
+        <strong>${p.title}</strong>
+        <div class="price">${fmt(p.price)}</div>
+        <a class="btn" href="https://wa.me/${WHATSAPP}?text=অর্ডার দিতে চাই: ${p.title} - ${fmt(p.price)}">WhatsApp অর্ডার</a>
+      </div>
+    </article>
+  `).join('');
+}
+
+/**************** INIT ****************/
+(async function init() {
+  setYear();
   try {
-    const res = await fetch(sheetURL);
-    const text = await res.text();
-
-    // JSON ডাটা Parse করা
-    const jsonData = JSON.parse(text.substr(47).slice(0, -2));
-    const rows = jsonData.table.rows;
-
-    let products = rows.map(r => ({
-      name: r.c[0]?.v,
-      price: r.c[1]?.v,
-      description: r.c[2]?.v,
-      image: fixImageLink(r.c[3]?.v)
-    }));
-
-    displayProducts(products);
+    PRODUCTS = await fetchProducts();
+    setStatus("✅ Google Sheets কানেক্টেড! প্রোডাক্ট লোড হয়েছে।");
+    renderGrid();
+    el('#search').addEventListener('input', renderGrid);
   } catch (err) {
-    console.error("Error loading products:", err);
+    console.error(err);
+    setStatus("❌ লোড হতে ব্যর্থ: " + err.message, false);
   }
-}
-
-// Google Drive / GitHub Image Fixer
-function fixImageLink(url) {
-  if (!url) return "images/product1.jpg";
-  if (url.includes("drive.google.com")) {
-    const match = url.match(/id=([^&]+)/);
-    const fileId = match ? match[1] : null;
-    if (fileId) {
-      return `https://drive.google.com/uc?id=${fileId}`;
-    }
-  }
-  return url;
-}
-
-// Products Show করা
-function displayProducts(products) {
-  const list = document.getElementById("product-list");
-  list.innerHTML = "";
-
-  products.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "product";
-
-    div.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <p>${p.description}</p>
-      <p><strong>৳${p.price}</strong></p>
-      <button>কিনুন</button>
-    `;
-
-    list.appendChild(div);
-  });
-}
-
-// Run
-loadProducts();
+})();
