@@ -26,6 +26,9 @@ function setStatus(msg, ok = true) {
   if (!s) return;
   s.textContent = msg;
   s.style.background = ok ? '#0b1424' : '#3b0a0a';
+  s.style.color = "white";
+  s.style.padding = "5px";
+  s.style.borderRadius = "5px";
 }
 
 /**************** FETCH CSV ****************/
@@ -66,7 +69,9 @@ function renderGrid() {
   const grid = el('#grid'); if (!grid) return;
   const q = (el('#search')?.value || '').trim().toLowerCase();
 
-  let list = PRODUCTS.filter(p => (q === '' || p.title.toLowerCase().includes(q) || (p.desc || '').toLowerCase().includes(q)));
+  let list = PRODUCTS.filter(p =>
+    (q === '' || p.title.toLowerCase().includes(q) || (p.desc || '').toLowerCase().includes(q))
+  );
 
   grid.innerHTML = list.map(p => `
     <article class="card">
@@ -74,7 +79,7 @@ function renderGrid() {
       <div class="card-body">
         <strong>${p.title}</strong>
         <div class="price">${fmt(p.price)}</div>
-        <a class="btn" href="https://wa.me/${WHATSAPP}?text=অর্ডার দিতে চাই: ${p.title} - ${fmt(p.price)}">WhatsApp অর্ডার</a>
+        <a class="btn" href="https://wa.me/${WHATSAPP}?text=অর্ডার দিতে চাই:%0A${p.title} - ${fmt(p.price)}">WhatsApp অর্ডার</a>
       </div>
     </article>
   `).join('');
