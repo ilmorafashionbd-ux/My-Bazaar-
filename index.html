@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ilmora Fashion BD</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>আমার শপ</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Header -->
   <header>
     <div class="logo">
-      <img src="images/logo.png" alt="Logo">
-      <h1>Ilmora Fashion BD</h1>
+      <img src="https://ilmorafashionbd-ux.github.io/My-Shop/images/logo.png" alt="Logo" />
+      <h1>আমার শপ</h1>
     </div>
     <nav>
-      <a href="#">হোম</a>
-      <a href="#">পণ্যসমূহ</a>
-      <a href="#">আমাদের সম্পর্কে</a>
-      <a href="#">যোগাযোগ</a>
+      <a href="index.html">হোম</a>
+      <a href="contact.html">কন্টাক্ট</a>
     </nav>
   </header>
 
   <!-- Banner -->
   <section class="banner">
-    <img src="images/banner.jpg" alt="Banner">
+    <img src="https://ilmorafashionbd-ux.github.io/My-Shop/images/banner.jpg" alt="Banner" />
   </section>
 
-  <!-- Product Section -->
+  <!-- Search & Filter -->
+  <section class="search-filter">
+    <input type="text" id="search" placeholder="পণ্য সার্চ করুন..." />
+  </section>
+
+  <!-- Products -->
   <main>
-    <h2>আমাদের জনপ্রিয় পণ্য</h2>
-    <div id="product-list" class="product-list">
-      <!-- Products load হবে script.js থেকে -->
-    </div>
+    <div id="status">⏳ লোড হচ্ছে...</div>
+    <div id="grid" class="grid"></div>
   </main>
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 Ilmora Fashion BD. All Rights Reserved.</p>
+    <p>© <span id="yr"></span> আমার শপ - All Rights Reserved</p>
   </footer>
 
   <script src="script.js"></script>
