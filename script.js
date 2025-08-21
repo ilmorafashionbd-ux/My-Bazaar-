@@ -1,6 +1,6 @@
 /**************** CONFIG ****************/
 // Google Sheet CSV Link
-const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvJSc-B0_uG9Yt1QOMq6Kcq0ccW4dbztEFeRXUYqZIIWvVQWhG4NrcHXB4WBq-5G2JXHRuz7lpbDGK/pub?gid=0&single=true&output=csv";
+const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRPm9-h3hnXGp1r7HBXl6qam4_s8v1SNKnp0Xwa-VdrxJXRRaQihnxKl51fIGuLF6I4VLhGRZ0cHAv9/pub?gid=0&single=true&output=csv";
 
 // GitHub Image Base Path
 const imageBaseURL = "https://ilmorafashionbd-ux.github.io/My-Shop/images/";
