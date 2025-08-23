@@ -197,7 +197,7 @@
     window.open(url,'_blank');
   }
 
-  <script>
+
 async function loadProducts(){
   try {
     const res = await fetch('./data/products.csv');
@@ -225,7 +225,7 @@ async function loadProducts(){
     console.error("CSV লোড করতে সমস্যা:", e);
   }
 }
-</script>
+
 
   // events
   els.search.addEventListener('input', e=>{ state.query = e.target.value.trim().toLowerCase(); renderProducts(); });
