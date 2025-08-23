@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Shop – ফ্রি ই‑কমার্স (GitHub Pages)</title>
-  <meta name="description" content="Mobile‑friendly static e‑commerce template. Build with plain HTML/CSS/JS. Host on GitHub Pages for free.">
+  <title>My Shop – ফ্রি ই-কমার্স (GitHub Pages)</title>
+  <meta name="description" content="Mobile-friendly static e-commerce template. Build with plain HTML/CSS/JS. Host on GitHub Pages for free.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
@@ -55,10 +55,10 @@
     <div class="container" style="display:flex;align-items:center;gap:12px;justify-content:space-between;padding:10px 0;">
       <div class="brand"><span class="logo"></span> <span>My Shop</span></div>
       <div class="toolbar">
-        <input id="search" class="search" placeholder="সার্চ করুন… (যেমন: টি‑শার্ট, কসমেটিকস)" />
+        <input id="search" class="search" placeholder="সার্চ করুন… (যেমন: টি-শার্ট, কসমেটিকস)" />
         <select id="category">
           <option value="all">সব ক্যাটাগরি</option>
-          <option>টি‑শার্ট</option>
+          <option>টি-শার্ট</option>
           <option>পোলো</option>
           <option>কসমেটিকস</option>
           <option>এ্যাক্সেসরিজ</option>
@@ -74,7 +74,7 @@
   </header>
 
   <div class="container">
-    <div class="notice">✳️ ডেমো ডাটা দেওয়া আছে। নিজের পণ্যের নাম, দাম, ছবি ও WhatsApp নম্বর কোডে পরিবর্তন করুন।</div>
+    <div class="notice">✳️ প্রোডাক্ট ডাটা products.csv ফাইল থেকে লোড হচ্ছে।</div>
     <div id="products" class="grid"></div>
   </div>
 
@@ -88,8 +88,8 @@
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer">
       <div class="row total"><span>সাবটোটাল</span><span id="cartTotal">৳0</span></div>
-      <button class="btn primary" id="checkoutBtn">✅ WhatsApp‑এ অর্ডার করুন</button>
-      <small class="muted">অফলাইনে পেমেন্ট/ক্যাশ অন ডেলিভারি—WhatsApp‑এ কনফার্ম করবেন।</small>
+      <button class="btn primary" id="checkoutBtn">✅ WhatsApp-এ অর্ডার করুন</button>
+      <small class="muted">অফলাইনে পেমেন্ট/ক্যাশ অন ডেলিভারি—WhatsApp-এ কনফার্ম করবেন।</small>
     </div>
   </aside>
 
@@ -98,18 +98,8 @@
   </footer>
 
   <script>
-  // ======= CONFIG: আপনার দোকানের WhatsApp নম্বর (দেশ কোডসহ, + ছাড়া) =======
-  const WHATSAPP_NUMBER = "8801778095805"; // উদাহরণ: বাংলাদেশ → 8801XXXXXXXXX
-
-  // ======= ডেমো পণ্যের ডাটা (নিজেরটা দিন) =======
-  const productsData = [
-    {id:1, title:"বেসিক টি‑শার্ট", category:"টি‑শার্ট", price:350, img:"https://picsum.photos/seed/t1/600/600", badge:"বেস্ট সেলার", createdAt:Date.now()-1000*60*60*24*1},
-    {id:2, title:"প্রিমিয়াম পোলো", category:"পোলো", price:650, img:"https://picsum.photos/seed/t2/600/600", badge:"নতুন", createdAt:Date.now()-1000*60*60*24*2},
-    {id:3, title:"ফেস ওয়াশ", category:"কসমেটিকস", price:220, img:"https://picsum.photos/seed/c1/600/600", badge:"", createdAt:Date.now()-1000*60*60*24*3},
-    {id:4, title:"ক্যাপ", category:"এ্যাক্সেসরিজ", price:180, img:"https://picsum.photos/seed/a1/600/600", badge:"", createdAt:Date.now()-1000*60*60*24*4},
-    {id:5, title:"গ্রাফিক টি‑শার্ট", category:"টি‑শার্ট", price:490, img:"https://picsum.photos/seed/t3/600/600", badge:"", createdAt:Date.now()-1000*60*60*24*1.5},
-    {id:6, title:"ম্যাট লিপস্টিক", category:"কসমেটিকস", price:299, img:"https://picsum.photos/seed/c2/600/600", badge:"হট", createdAt:Date.now()-1000*60*60*24*2.5}
-  ];
+  const WHATSAPP_NUMBER = "8801700000000"; // আপনার নম্বর দিন
+  let productsData = [];
 
   const els = {
     grid: document.getElementById('products'),
@@ -180,7 +170,7 @@
     els.cartTotal.textContent = formatBDT(total);
     els.cartItems.innerHTML = state.cart.map(i=>`
       <div class="cart-item">
-        <img src="https://picsum.photos/seed/${i.id}/200/200" alt="${i.title}">
+        <img src="${productsData.find(p=>p.id===i.id).img}" alt="${i.title}">
         <div>
           <div style="font-weight:600;">${i.title}</div>
           <div class="muted">${formatBDT(i.price)} × ${i.qty}</div>
@@ -207,6 +197,27 @@
     window.open(url,'_blank');
   }
 
+  async function loadProducts(){
+    try {
+      const res = await fetch('./data/products.csv');
+      const text = await res.text();
+      const rows = text.trim().split('\n').map(r=>r.split(','));
+      const headers = rows.shift();
+      productsData = rows.map(r=>{
+        const obj = {};
+        headers.forEach((h,i)=>obj[h]=r[i]);
+        obj.id = parseInt(obj.id);
+        obj.price = parseFloat(obj.price);
+        obj.createdAt = new Date(obj.createdAt).getTime();
+        return obj;
+      });
+      renderProducts();
+      syncCart();
+    } catch(e){
+      console.error("CSV লোড করতে সমস্যা:", e);
+    }
+  }
+
   // events
   els.search.addEventListener('input', e=>{ state.query = e.target.value.trim().toLowerCase(); renderProducts(); });
   els.category.addEventListener('change', e=>{ state.category = e.target.value; renderProducts(); });
@@ -218,8 +229,7 @@
 
   // init
   document.getElementById('year').textContent = new Date().getFullYear();
-  renderProducts();
-  syncCart();
+  loadProducts();
   </script>
 </body>
 </html>
