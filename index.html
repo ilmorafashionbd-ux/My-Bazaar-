@@ -197,26 +197,35 @@
     window.open(url,'_blank');
   }
 
-  async function loadProducts(){
-    try {
-      const res = await fetch('./data/products.csv');
-      const text = await res.text();
-      const rows = text.trim().split('\n').map(r=>r.split(','));
-      const headers = rows.shift();
-      productsData = rows.map(r=>{
-        const obj = {};
-        headers.forEach((h,i)=>obj[h]=r[i]);
-        obj.id = parseInt(obj.id);
-        obj.price = parseFloat(obj.price);
-        obj.createdAt = new Date(obj.createdAt).getTime();
-        return obj;
-      });
-      renderProducts();
-      syncCart();
-    } catch(e){
-      console.error("CSV লোড করতে সমস্যা:", e);
-    }
+  <script>
+async function loadProducts(){
+  try {
+    const res = await fetch('./data/products.csv');
+    const text = await res.text();
+    const rows = text.trim().split('\n').map(r=>r.split(','));
+    const headers = rows.shift();
+
+    productsData = rows.map(r=>{
+      const obj = {};
+      headers.forEach((h,i)=>obj[h]=r[i]);
+      obj.id = parseInt(obj.id);
+      obj.price = parseFloat(obj.price);
+      obj.createdAt = new Date(obj.createdAt).getTime();
+
+      // 🔹 ইমেজ পাথ আপডেট: শুধু ফাইলনেম নিলে, সেটার আগে GitHub Pages URL যোগ করবে
+      if(obj.img){
+        obj.img = `https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/${obj.img}`;
+      }
+      return obj;
+    });
+
+    renderProducts();
+    syncCart();
+  } catch(e){
+    console.error("CSV লোড করতে সমস্যা:", e);
   }
+}
+</script>
 
   // events
   els.search.addEventListener('input', e=>{ state.query = e.target.value.trim().toLowerCase(); renderProducts(); });
