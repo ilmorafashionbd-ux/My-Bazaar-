@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     // এখানে আপনার Google Sheet-এর URL যুক্ত করুন
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRvJSc-B0_uG9Yt1QOMq6Kcq0ccW4dbztEFeRXUYqZIIWvVQWhG4NrcHXB4WBq-5G2JXHRuz7lpbDGK/pub?gid=0&single=true&output=csv';
-    
+
     // GitHub repository-এর বেস URL যেখানে ছবিগুলো রাখা আছে
     const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/';
 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Skipping invalid product data:', product);
                 return;
             }
-            
+
             // GitHub থেকে ছবির URL তৈরি করা
             const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
 
@@ -114,22 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const showProductDetail = (product) => {
         // GitHub থেকে ছবির URL তৈরি করা
         const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
-        const otherImages = product.other_images ? 
-            product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
-            
-        const allImages = [mainImageUrl, ...otherImages].filter(url => url);
+        const allImages = [mainImageUrl]; // এখানে শুধু মেইন ইমেজটি রাখা হয়েছে
 
         productDetailContainer.innerHTML = `
             <div class="product-detail-layout">
                 <div class="product-detail-images">
                     <img id="main-product-image" class="main-image" src="${allImages[0] || 'https://placehold.co/400x400/CCCCCC/000000?text=No+Image'}" alt="${product.product_name}">
-                    ${allImages.length > 1 ? `
-                    <div class="thumbnail-images">
-                        ${allImages.map((img, index) => `
-                            <img class="thumbnail" src="${img}" alt="Thumbnail ${index + 1}" data-img-url="${img}">
-                        `).join('')}
-                    </div>
-                    ` : ''}
                 </div>
                 <div class="product-detail-info">
                     <h2>${product.product_name}</h2>
@@ -145,18 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         productDetailModal.style.display = 'block';
         document.body.classList.add('modal-open');
-
-        // Handle thumbnail image click
-        const thumbnails = productDetailContainer.querySelectorAll('.thumbnail');
-        const mainImage = document.getElementById('main-product-image');
-        thumbnails.forEach(thumb => {
-            thumb.addEventListener('click', (e) => {
-                mainImage.src = e.target.dataset.imgUrl;
-                thumbnails.forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-            });
-        });
-        if (thumbnails.length > 0) thumbnails[0].classList.add('active');
 
         // Add event listeners to the new buttons
         document.getElementById('add-to-cart-btn').addEventListener('click', () => {
