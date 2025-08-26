@@ -10,7 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Main JavaScript for handling products, modals, and cart functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT-U2n7G_4LzVb-2B2D2yH6eJj8C1t6jS6xJ2f3fC_J8Vb8vJ8p8F8c8d8f-7fB7m7q7h/pub?output=csv';
+    // এখানে আপনার Google Sheet-এর URL যুক্ত করুন
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRvJSc-B0_uG9Yt1QOMq6Kcq0ccW4dbztEFeRXUYqZIIWvVQWhG4NrcHXB4WBq-5G2JXHRuz7lpbDGK/pub?gid=0&single=true&output=csv';
+    
+    // GitHub repository-এর বেস URL যেখানে ছবিগুলো রাখা আছে
+    const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/';
+
     let allProducts = [];
     let cart = [];
 
@@ -60,10 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         productsToDisplay.forEach(product => {
-            if (!product.id || !product.product_name || !product.price) {
+            if (!product.id || !product.product_name || !product.price || !product.image_url) {
                 console.warn('Skipping invalid product data:', product);
                 return;
             }
+            
+            // GitHub থেকে ছবির URL তৈরি করা
+            const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
 
             const productCard = document.createElement('div');
             productCard.classList.add('product-card');
@@ -77,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${product.image_url}" alt="${product.product_name}" onerror="this.onerror=null;this.src='https://placehold.co/400x400/CCCCCC/000000?text=No+Image';">
+                    <img src="${mainImageUrl}" alt="${product.product_name}" onerror="this.onerror=null;this.src='https://placehold.co/400x400/CCCCCC/000000?text=No+Image';">
                     ${isOutOfStock ? `<span class="stock-status">Out of stock</span>` : ''}
                 </div>
                 <div class="product-info">
@@ -104,8 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show product detail modal
     const showProductDetail = (product) => {
-        const otherImages = product.other_images ? product.other_images.split(',').map(img => img.trim()) : [];
-        const allImages = [product.image_url, ...otherImages].filter(url => url);
+        // GitHub থেকে ছবির URL তৈরি করা
+        const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
+        const otherImages = product.other_images ? 
+            product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
+            
+        const allImages = [mainImageUrl, ...otherImages].filter(url => url);
 
         productDetailContainer.innerHTML = `
             <div class="product-detail-layout">
