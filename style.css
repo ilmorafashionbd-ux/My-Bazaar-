@@ -632,8 +632,29 @@ body.modal-open {
 }
 
 /* Cart Page Styles */
-#cart-page .modal-content {
-    max-width: 800px;
+#cart-page.full-page-modal {
+    display: flex;
+    flex-direction: column;
+}
+
+#cart-page .modal-content.full-page-content {
+    background: none;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 80px; /* Space for bottom nav */
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 25px 15px 80px;
+}
+
+#cart-page .header {
+    position: sticky;
+    top: 0;
+}
+
+#cart-page .bottom-nav {
+    position: fixed;
+    bottom: 0;
 }
 
 .cart-item {
@@ -1074,54 +1095,3 @@ body.modal-open {
         grid-template-columns: 1fr 1fr;
     }
 }
-
-/* Mobile-friendly product detail page */
-@media (max-width: 768px) {
-    .product-detail-premium {
-        padding: 15px;
-    }
-    
-    .product-detail-images, 
-    .product-detail-info {
-        flex: 1 1 100%;
-    }
-    
-    .main-image {
-        max-height: 300px;
-    }
-    
-    .thumbnail {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .product-title {
-        font-size: 22px;
-    }
-    
-    .product-meta {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .variant-options {
-        justify-content: center;
-    }
-    
-    .quantity-selector {
-        justify-content: center;
-    }
-    
-    .order-buttons {
-        flex-direction: column;
-    }
-    
-    .add-to-cart-detail-btn,
-    .whatsapp-order-btn,
-    .messenger-order-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* Cart page mobi
