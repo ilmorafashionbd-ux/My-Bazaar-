@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Open cart page
     const openCartPage = () => {
         displayCartItems();
-        cartPage.style.display = 'block';
+        cartPage.style.display = 'flex';
         document.body.classList.add('modal-open');
     };
 
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Display products on homepage - UPDATED: Removed Add to Cart button
+    // Display products on homepage
     const displayProducts = (productsToDisplay) => {
         productGrid.innerHTML = '';
         if (productsToDisplay.length === 0) {
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allImages = [mainImageUrl, ...otherImages];
         
         // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : [];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
@@ -352,12 +352,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                     </div>
                     
+                    ${variants.length > 0 ? `
                     <div class="variant-selector">
                         <label class="variant-label">Weight / Variant:</label>
                         <div class="variant-options">
                             ${variantOptions}
                         </div>
-                    </div>
+                    </div>` : ''}
                     
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
@@ -474,6 +475,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Add event listeners to related product buttons
+        document.querySelectorAll('.related-grid .add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const productId = btn.dataset.id;
+                const relatedProduct = allProducts.find(p => p.id == productId);
+                if (relatedProduct) {
+                    addToCart(relatedProduct);
+                }
+            });
+        });
+
         document.querySelectorAll('.related-grid .order-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -493,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allImages = [mainImageUrl, ...otherImages];
         
         // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : [];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
@@ -557,12 +569,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                     </div>
                     
+                    ${variants.length > 0 ? `
                     <div class="variant-selector">
                         <label class="variant-label">Weight / Variant:</label>
                         <div class="variant-options">
                             ${variantOptions}
                         </div>
-                    </div>
+                    </div>` : ''}
                     
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
@@ -664,7 +677,32 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Open Facebook Messenger with pre-filled message
             const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
-            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blas
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+
+        // Related products click event
+        productDetailContainer.querySelectorAll('.related-grid .product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const productId = card.dataset.productId;
+                const relatedProduct = allProducts.find(p => p.id == productId);
+                if (relatedProduct) {
+                    showProductDetailModal(relatedProduct);
+                }
+            });
+        });
+
+        // Add event listeners to related product buttons
+        productDetailContainer.querySelectorAll('.related-grid .add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const productId = btn.dataset.id;
+                const relatedProduct = allProducts.find(p => p.id == productId);
+                if (relatedProduct) {
+                    addToCart(relatedProduct);
+                }
+            });
+        });
+
         productDetailContainer.querySelectorAll('.related-grid .order-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
