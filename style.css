@@ -631,113 +631,6 @@ body.modal-open {
     line-height: 1;
 }
 
-/* Cart Page Styles */
-#cart-page.full-page-modal {
-    display: flex;
-    flex-direction: column;
-}
-
-#cart-page .modal-content.full-page-content {
-    background: none;
-    margin: 0;
-    padding-top: 0;
-    padding-bottom: 80px; /* Space for bottom nav */
-    max-height: 100vh;
-    overflow-y: auto;
-    padding: 25px 15px 80px;
-}
-
-#cart-page .header {
-    position: sticky;
-    top: 0;
-}
-
-#cart-page .bottom-nav {
-    position: fixed;
-    bottom: 0;
-}
-
-.cart-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid var(--border-color);
-    gap: 15px;
-}
-
-.cart-item-image {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.cart-item-details {
-    flex-grow: 1;
-}
-
-.cart-item-name {
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.cart-item-price {
-    color: var(--primary-color);
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.cart-item-quantity {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.quantity-btn {
-    width: 30px;
-    height: 30px;
-    background: var(--secondary-color);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cart-item-quantity input {
-    width: 40px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 5px;
-}
-
-.remove-from-cart {
-    background: none;
-    border: none;
-    color: #dc3545;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 5px;
-}
-
-.cart-total {
-    text-align: right;
-    padding: 20px;
-    border-top: 2px solid var(--border-color);
-    margin-top: 20px;
-}
-
-.cart-total h3 {
-    font-size: 24px;
-}
-
-#checkout-btn {
-    margin-top: 20px;
-    width: 100%;
-}
-
 /* Premium Plus Style Product Detail */
 .product-detail-premium {
     display: flex;
@@ -1059,15 +952,6 @@ body.modal-open {
     
     .whatsapp-order-btn, .messenger-order-btn, .add-to-cart-detail-btn {
         width: 100%;
-        justify-content: center;
-    }
-    
-    .cart-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .cart-item-quantity {
         justify-content: center;
     }
 }
