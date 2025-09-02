@@ -277,6 +277,26 @@ body.modal-open {
     gap: 8px;
 }
 
+.add-to-cart-btn {
+    background-color: #ffc107;
+    color: var(--text-color);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #e0a800;
+}
+
 .order-btn {
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -288,10 +308,6 @@ body.modal-open {
     font-weight: 500;
     transition: background-color 0.3s;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
 }
 
 .order-btn:hover {
@@ -880,6 +896,24 @@ body.modal-open {
     margin-bottom: 15px;
 }
 
+.add-to-cart-detail-btn {
+    background-color: #ffc107;
+    color: var(--text-color);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-detail-btn:hover {
+    background-color: #e0a800;
+}
+
 .whatsapp-order-btn {
     background-color: #25D366;
     color: white;
@@ -1002,7 +1036,7 @@ body.modal-open {
         flex-direction: column;
     }
     
-    .whatsapp-order-btn, .messenger-order-btn {
+    .whatsapp-order-btn, .messenger-order-btn, .add-to-cart-detail-btn {
         width: 100%;
         justify-content: center;
     }
@@ -1040,3 +1074,54 @@ body.modal-open {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* Mobile-friendly product detail page */
+@media (max-width: 768px) {
+    .product-detail-premium {
+        padding: 15px;
+    }
+    
+    .product-detail-images, 
+    .product-detail-info {
+        flex: 1 1 100%;
+    }
+    
+    .main-image {
+        max-height: 300px;
+    }
+    
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .product-title {
+        font-size: 22px;
+    }
+    
+    .product-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .variant-options {
+        justify-content: center;
+    }
+    
+    .quantity-selector {
+        justify-content: center;
+    }
+    
+    .order-buttons {
+        flex-direction: column;
+    }
+    
+    .add-to-cart-detail-btn,
+    .whatsapp-order-btn,
+    .messenger-order-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Cart page mobi
