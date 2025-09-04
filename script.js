@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Main JavaScript for handling products, modals, and cart functionality
 document.addEventListener('DOMContentLoaded', () => {
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY7hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
-    const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/';
+    const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Shop/images/';
 
     let allProducts = [];
     let cart = [];
@@ -89,326 +89,442 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="product-info">
                     <h3 class="product-name">${product.product_name}</h3>
-                    <p class="product-price">৳ ${product.price}</p>
-                    <button class="order-btn" ${isOutOfStock ? 'disabled' : ''}>
-                        ${isOutOfStock ? 'স্টকে নেই' : 'অর্ডার করুন'}
-                    </button>
+                    <div class="product-price">${product.price}৳</div>
                 </div>
             `;
-
-            // Add event listener to show product details
-            productCard.querySelector('.order-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (!isOutOfStock) {
-                    openOrderModal(product);
-                }
-            });
+            productGrid.appendChild(productCard);
 
             productCard.addEventListener('click', () => {
-                openProductDetailModal(product);
+                // Redirect to single product view
+                window.location.href = `index.html?product=${product.id}`;
             });
-
-            productGrid.appendChild(productCard);
         });
     };
 
-    // Open product detail modal
-    const openProductDetailModal = (product) => {
-        const imageUrls = [product.image_url];
-        if (product.image2) imageUrls.push(product.image2);
-        if (product.image3) imageUrls.push(product.image3);
-        if (product.image4) imageUrls.push(product.image4);
-
-        const isOutOfStock = product.stock_status && product.stock_status.toLowerCase() === 'out of stock';
-
-        // Get related products (same category, excluding current product)
-        const relatedProducts = allProducts.filter(p => 
-            p.category === product.category && p.id !== product.id
-        ).slice(0, 4); // Limit to 4 related products
-
-        productDetailContainer.innerHTML = `
-            <div class="product-detail-premium">
-                <div class="product-detail-images">
-                    <img src="${GITHUB_IMAGE_BASE_URL + imageUrls[0]}" alt="${product.product_name}" 
-                         class="main-image" id="main-product-image"
-                         onerror="this.onerror=null;this.src='https://placehold.co/600x600?text=No+Image';">
-                    <div class="thumbnail-images">
-                        ${imageUrls.map((url, index) => `
-                            <img src="${GITHUB_IMAGE_BASE_URL + url}" alt="Thumbnail ${index + 1}" 
-                                 class="thumbnail ${index === 0 ? 'active' : ''}"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=No+Image';">
-                        `).join('')}
+    // Show single product view when product ID is in URL
+    const showSingleProductView = (product) => {
+        // Hide elements that are not needed in single product view
+        document.querySelector('.banner').style.display = 'none';
+        document.querySelector('.categories').style.display = 'none';
+        document.querySelector('.section-title').style.display = 'none';
+        document.querySelector('.footer').style.marginBottom = '0';
+        
+        // Change page title
+        document.title = `${product.product_name} - Ilmora Fashion BD`;
+        
+        const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
+        const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
+        const allImages = [mainImageUrl, ...otherImages];
+        
+        // Generate variant options if available
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
+        const variantOptions = variants.map(v => 
+            `<div class="variant-option" data-value="${v}">${v}</div>`
+        ).join('');
+        
+        // Generate related products
+        const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+        const relatedProductsHTML = relatedProducts.map(p => {
+            const imgUrl = GITHUB_IMAGE_BASE_URL + p.image_url;
+            return `
+                <div class="product-card" data-product-id="${p.id}">
+                    <div class="product-image">
+                        <img src="${imgUrl}" alt="${p.product_name}" 
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=No+Image';">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${p.product_name}</h3>
+                        <div class="product-price">${p.price}৳</div>
                     </div>
                 </div>
+            `;
+        }).join('');
+
+        // Replace product grid with single product view
+        productGrid.innerHTML = `
+            <div class="product-detail-premium">
+                <div class="product-detail-images">
+                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
+                    ${allImages.length > 1 ? `
+                        <div class="thumbnail-images">
+                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
+                        </div>` : ''}
+                </div>
+                
                 <div class="product-detail-info">
                     <h2 class="product-title">${product.product_name}</h2>
+                    
                     <div class="product-meta">
                         <div class="meta-item">
-                            <strong>ক্যাটাগরি:</strong> ${product.category || 'N/A'}
+                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
                         </div>
                         <div class="meta-item">
-                            <strong>স্টক:</strong> 
-                            <span style="color: ${isOutOfStock ? '#dc3545' : '#28a745'}">
-                                ${isOutOfStock ? 'স্টকে নেই' : 'স্টকে আছে'}
+                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong> 
+                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                ${product.stock_status || 'In Stock'}
                             </span>
                         </div>
                     </div>
+                    
                     <div class="product-price-section">
-                        <div class="price-main">৳ ${product.price}</div>
+                        <div class="price-main">${product.price}৳</div>
                         ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                     </div>
-                    ${product.variants ? `
-                        <div class="variant-selector">
-                            <label class="variant-label">ভ্যারিয়েন্ট নির্বাচন করুন:</label>
-                            <div class="variant-options">
-                                ${product.variants.split(',').map(variant => `
-                                    <div class="variant-option">${variant.trim()}</div>
-                                `).join('')}
-                            </div>
+                    
+                    <div class="variant-selector">
+                        <label class="variant-label">Weight / Variant:</label>
+                        <div class="variant-options">
+                            ${variantOptions}
                         </div>
-                    ` : ''}
+                    </div>
+                    
                     <div class="quantity-selector">
-                        <span class="quantity-label">পরিমাণ:</span>
+                        <span class="quantity-label">Quantity:</span>
                         <div class="quantity-controls">
-                            <button class="quantity-btn" id="decrease-quantity">-</button>
-                            <input type="number" class="quantity-input" id="product-quantity" value="1" min="1">
-                            <button class="quantity-btn" id="increase-quantity">+</button>
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn plus">+</button>
                         </div>
                     </div>
+                    
                     <div class="order-buttons">
-                        <button class="whatsapp-order-btn" ${isOutOfStock ? 'disabled' : ''}>
-                            <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপে অর্ডার করুন
+                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Order
                         </button>
-                        <button class="messenger-order-btn" ${isOutOfStock ? 'disabled' : ''}>
-                            <i class="fab fa-facebook-messenger"></i> মেসেঞ্জারে অর্ডার করুন
+                        <button class="messenger-order-btn" id="messenger-order-btn">
+                            <i class="fab fa-facebook-messenger"></i> Messenger Order
                         </button>
                     </div>
+                    
                     <div class="product-description">
-                        <h3 class="description-title">পণ্যের বিবরণ</h3>
+                        <h3 class="description-title">Product Description</h3>
                         <div class="description-content">
-                            ${product.description || 'কোনো বিবরণ পাওয়া যায়নি।'}
+                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
                         </div>
                     </div>
                 </div>
+                
                 ${relatedProducts.length > 0 ? `
-                    <div class="related-products">
-                        <h3 class="related-title">সম্পর্কিত পণ্য</h3>
-                        <div class="related-grid">
-                            ${relatedProducts.map(relatedProduct => {
-                                const isRelatedOutOfStock = relatedProduct.stock_status && 
-                                    relatedProduct.stock_status.toLowerCase() === 'out of stock';
-                                return `
-                                    <div class="product-card" data-product-id="${relatedProduct.id}">
-                                        <div class="product-image">
-                                            <img src="${GITHUB_IMAGE_BASE_URL + relatedProduct.image_url}" 
-                                                 alt="${relatedProduct.product_name}"
-                                                 onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=No+Image';">
-                                            ${isRelatedOutOfStock ? `<span class="stock-status">Out of stock</span>` : ''}
-                                        </div>
-                                        <div class="product-info">
-                                            <h3 class="product-name">${relatedProduct.product_name}</h3>
-                                            <p class="product-price">৳ ${relatedProduct.price}</p>
-                                            <button class="order-btn" ${isRelatedOutOfStock ? 'disabled' : ''}>
-                                                ${isRelatedOutOfStock ? 'স্টকে নেই' : 'অর্ডার করুন'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
+                <div class="related-products">
+                    <h3 class="related-title">Related Products</h3>
+                    <div class="related-grid">
+                        ${relatedProductsHTML}
                     </div>
+                </div>
                 ` : ''}
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="index.html" class="order-btn" style="display: inline-block; width: auto; padding: 10px 20px;">
+                        <i class="fas fa-arrow-left"></i> সকল পণ্য দেখুন
+                    </a>
+                </div>
             </div>
         `;
-
-        // Add event listeners for thumbnails
-        const thumbnails = productDetailContainer.querySelectorAll('.thumbnail');
-        const mainImage = productDetailContainer.querySelector('#main-product-image');
-
-        thumbnails.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                thumbnails.forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-                mainImage.src = thumb.src;
+        
+        // Thumbnails functionality
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', e => {
+                document.getElementById('main-product-image').src = e.target.dataset.imgUrl;
+                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
             });
         });
 
-        // Add event listeners for variant options
-        const variantOptions = productDetailContainer.querySelectorAll('.variant-option');
-        variantOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                variantOptions.forEach(o => o.classList.remove('selected'));
-                option.classList.add('selected');
+        // Variant selection
+        const variantOptionsEl = document.querySelectorAll('.variant-option');
+        if (variantOptionsEl.length > 0) {
+            variantOptionsEl[0].classList.add('selected');
+            
+            variantOptionsEl.forEach(option => {
+                option.addEventListener('click', () => {
+                    variantOptionsEl.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
             });
+        }
+
+        // Quantity controls
+        const quantityInput = document.querySelector('.quantity-input');
+        document.querySelector('.quantity-btn.plus').addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
         });
-
-        // Add event listeners for quantity controls
-        const decreaseBtn = productDetailContainer.querySelector('#decrease-quantity');
-        const increaseBtn = productDetailContainer.querySelector('#increase-quantity');
-        const quantityInput = productDetailContainer.querySelector('#product-quantity');
-
-        decreaseBtn.addEventListener('click', () => {
-            if (quantityInput.value > 1) {
+        
+        document.querySelector('.quantity-btn.minus').addEventListener('click', () => {
+            if (parseInt(quantityInput.value) > 1) {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
             }
         });
 
-        increaseBtn.addEventListener('click', () => {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
+        // WhatsApp order button
+        document.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
+            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            showOrderForm(product, selectedVariant, quantity);
         });
 
-        // Add event listeners for order buttons
-        const whatsappBtn = productDetailContainer.querySelector('.whatsapp-order-btn');
-        const messengerBtn = productDetailContainer.querySelector('.messenger-order-btn');
+        // Messenger order button
+        document.querySelector('#messenger-order-btn').addEventListener('click', () => {
+            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
+            
+            // Open Facebook Messenger with pre-filled message
+            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
 
-        if (whatsappBtn && !isOutOfStock) {
-            whatsappBtn.addEventListener('click', () => {
-                const selectedVariant = productDetailContainer.querySelector('.variant-option.selected');
-                const variantText = selectedVariant ? selectedVariant.textContent : '';
-                const quantity = quantityInput.value;
-                openOrderModal(product, variantText, quantity);
-            });
-        }
-
-        if (messengerBtn && !isOutOfStock) {
-            messengerBtn.addEventListener('click', () => {
-                const selectedVariant = productDetailContainer.querySelector('.variant-option.selected');
-                const variantText = selectedVariant ? selectedVariant.textContent : '';
-                const quantity = quantityInput.value;
-                openMessengerOrder(product, variantText, quantity);
-            });
-        }
-
-        // Add event listeners to related products
-        const relatedProductCards = productDetailContainer.querySelectorAll('.related-products .product-card');
-        relatedProductCards.forEach(card => {
+        // Related products click event
+        document.querySelectorAll('.related-grid .product-card').forEach(card => {
             card.addEventListener('click', () => {
-                const relatedProductId = card.dataset.productId;
-                const relatedProduct = allProducts.find(p => p.id == relatedProductId);
+                const productId = card.dataset.productId;
+                // Redirect to the related product's detail page
+                window.location.href = `index.html?product=${productId}`;
+            });
+        });
+    };
+
+    // Show product detail in modal (for homepage)
+    const showProductDetailModal = (product) => {
+        const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
+        const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
+        const allImages = [mainImageUrl, ...otherImages];
+        
+        // Generate variant options if available
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
+        const variantOptions = variants.map(v => 
+            `<div class="variant-option" data-value="${v}">${v}</div>`
+        ).join('');
+        
+        // Generate related products
+        const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+        const relatedProductsHTML = relatedProducts.map(p => {
+            const imgUrl = GITHUB_IMAGE_BASE_URL + p.image_url;
+            return `
+                <div class="product-card" data-product-id="${p.id}">
+                    <div class="product-image">
+                        <img src="${imgUrl}" alt="${p.product_name}" 
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=No+Image';">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${p.product_name}</h3>
+                        <div class="product-price">${p.price}৳</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        productDetailContainer.innerHTML = `
+            <div class="product-detail-premium">
+                <div class="product-detail-images">
+                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
+                    ${allImages.length > 1 ? `
+                        <div class="thumbnail-images">
+                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
+                        </div>` : ''}
+                </div>
+                
+                <div class="product-detail-info">
+                    <h2 class="product-title">${product.product_name}</h2>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong> 
+                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                ${product.stock_status || 'In Stock'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-price-section">
+                        <div class="price-main">${product.price}৳</div>
+                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
+                    </div>
+                    
+                    <div class="variant-selector">
+                        <label class="variant-label">Weight / Variant:</label>
+                        <div class="variant-options">
+                            ${variantOptions}
+                        </div>
+                    </div>
+                    
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantity:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-buttons">
+                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Order
+                        </button>
+                        <button class="messenger-order-btn" id="messenger-order-btn">
+                            <i class="fab fa-facebook-messenger"></i> Messenger Order
+                        </button>
+                    </div>
+                    
+                    <div class="product-description">
+                        <h3 class="description-title">Product Description</h3>
+                        <div class="description-content">
+                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        </div>
+                    </div>
+                </div>
+                
+                ${relatedProducts.length > 0 ? `
+                <div class="related-products">
+                    <h3 class="related-title">Related Products</h3>
+                    <div class="related-grid">
+                        ${relatedProductsHTML}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        productDetailModal.style.display = 'block';
+        document.body.classList.add('modal-open');
+
+        // Thumbnails functionality
+        productDetailContainer.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', e => {
+                document.getElementById('main-product-image').src = e.target.dataset.imgUrl;
+                productDetailContainer.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // Variant selection
+        const variantOptionsEl = productDetailContainer.querySelectorAll('.variant-option');
+        if (variantOptionsEl.length > 0) {
+            variantOptionsEl[0].classList.add('selected');
+            
+            variantOptionsEl.forEach(option => {
+                option.addEventListener('click', () => {
+                    variantOptionsEl.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        // Quantity controls
+        const quantityInput = productDetailContainer.querySelector('.quantity-input');
+        productDetailContainer.querySelector('.quantity-btn.plus').addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+        
+        productDetailContainer.querySelector('.quantity-btn.minus').addEventListener('click', () => {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        });
+
+        // WhatsApp order button
+        productDetailContainer.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            showOrderForm(product, selectedVariant, quantity);
+        });
+
+        // Messenger order button
+        productDetailContainer.querySelector('#messenger-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
+            
+            // Open Facebook Messenger with pre-filled message
+            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+
+        // Related products click event
+        productDetailContainer.querySelectorAll('.related-grid .product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const productId = card.dataset.productId;
+                const relatedProduct = allProducts.find(p => p.id == productId);
                 if (relatedProduct) {
-                    openProductDetailModal(relatedProduct);
+                    showProductDetailModal(relatedProduct);
                 }
             });
         });
 
-        // Show the modal
-        productDetailModal.style.display = 'block';
-        document.body.classList.add('modal-open');
+        history.pushState({ modalOpen: true }, '', '#product-' + product.id);
     };
 
-    // Open order modal
-    const openOrderModal = (product, variant = '', quantity = 1) => {
-        document.getElementById('product-name-input').value = `${product.product_name}${variant ? ` (${variant})` : ''}`;
+    // Close product modal
+    const closeProductDetailModal = () => {
+        productDetailModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    };
+
+    productModalCloseBtn.addEventListener('click', closeProductDetailModal);
+
+    window.addEventListener('popstate', e => {
+        if (!(e.state && e.state.modalOpen)) closeProductDetailModal();
+    });
+
+    // Cart
+    const addToCart = (product) => {
+        const existing = cart.find(p => p.id === product.id);
+        if (existing) existing.quantity++;
+        else cart.push({...product, quantity:1});
+        updateCartCount();
+        alert(`${product.product_name} কার্টে যুক্ত হয়েছে`);
+    };
+
+    const updateCartCount = () => {
+        const total = cart.reduce((s, i) => s + i.quantity, 0);
+        cartCountTop.textContent = total;
+        cartCountBottom.textContent = total;
+    };
+
+    // Order form
+    const showOrderForm = (product, variant = '', quantity = 1) => {
+        const productNameWithVariant = `${product.product_name} ${variant}`.trim();
+        document.getElementById('product-name-input').value = productNameWithVariant;
         document.getElementById('product-id-input').value = product.id;
-        
         orderModal.style.display = 'block';
         document.body.classList.add('modal-open');
     };
 
-    // Open Messenger order
-    const openMessengerOrder = (product, variant = '', quantity = 1) => {
-        const message = `আমি এই পণ্যটি অর্ডার করতে চাই:\n\nপণ্যের নাম: ${product.product_name}${variant ? ` (${variant})` : ''}\nপরিমাণ: ${quantity}\nমূল্য: ৳${product.price}`;
-        const encodedMessage = encodeURIComponent(message);
-        window.open(`https://m.me/61578353266944?text=${encodedMessage}`, '_blank');
-    };
-
-    // Close modals
-    const closeModals = () => {
-        productDetailModal.style.display = 'none';
+    document.getElementById('order-modal-close').addEventListener('click', () => {
         orderModal.style.display = 'none';
         document.body.classList.remove('modal-open');
-    };
-
-    // Event listeners for closing modals
-    productModalCloseBtn.addEventListener('click', closeModals);
-    document.getElementById('order-modal-close').addEventListener('click', closeModals);
-
-    window.addEventListener('click', (e) => {
-        if (e.target === productDetailModal || e.target === orderModal) {
-            closeModals();
-        }
     });
 
-    // Handle order form submission
-    orderForm.addEventListener('submit', (e) => {
+    orderForm.addEventListener('submit', e => {
         e.preventDefault();
-        
+        const name = document.getElementById('customer-name').value;
+        const address = document.getElementById('customer-address').value;
+        const mobile = document.getElementById('customer-mobile').value;
         const productName = document.getElementById('product-name-input').value;
-        const customerName = document.getElementById('customer-name').value;
-        const customerAddress = document.getElementById('customer-address').value;
-        const customerMobile = document.getElementById('customer-mobile').value;
-        
-        const message = `নতুন অর্ডার:\n\nপণ্যের নাম: ${productName}\nগ্রাহকের নাম: ${customerName}\nঠিকানা: ${customerAddress}\nমোবাইল: ${customerMobile}`;
-        const encodedMessage = encodeURIComponent(message);
-        
-        window.open(`https://wa.me/8801778095805?text=${encodedMessage}`, '_blank');
-        
-        // Reset form and close modal
-        orderForm.reset();
-        closeModals();
+        const productId = document.getElementById('product-id-input').value;
+
+        const msg = `🛒 নতুন অর্ডার!\nপণ্যের নাম: ${productName}\nID: ${productId}\n\nক্রেতা: ${name}\nঠিকানা: ${address}\nমোবাইল: ${mobile}`;
+        window.open(`https://wa.me/8801778095805?text=${encodeURIComponent(msg)}`, '_blank');
+        orderModal.style.display = 'none';
     });
 
-    // Handle category filtering
+    // Category filter
     categoryItems.forEach(item => {
         item.addEventListener('click', () => {
-            const category = item.dataset.category;
-            
-            // Remove active class from all categories
-            categoryItems.forEach(cat => cat.classList.remove('active'));
-            
-            // Add active class to clicked category
-            item.classList.add('active');
-            
-            if (category === 'all') {
-                displayProducts(allProducts);
-            } else {
-                const filteredProducts = allProducts.filter(product => 
-                    product.category && product.category.toLowerCase() === category.toLowerCase()
-                );
-                displayProducts(filteredProducts);
-            }
+            const cat = item.dataset.category;
+            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.toLowerCase().replace(/\s/g,'-') === cat);
+            displayProducts(filtered);
         });
     });
 
-    // Single product view function
-    const showSingleProductView = (product) => {
-        // Hide header and other sections for single product view
-        document.querySelector('.header').style.display = 'none';
-        document.querySelector('.banner').style.display = 'none';
-        document.querySelector('.categories').style.display = 'none';
-        document.querySelector('.products').style.display = 'none';
-        document.querySelector('.footer').style.display = 'none';
-        document.querySelector('.bottom-nav').style.display = 'none';
-        
-        // Create a back button
-        const backButton = document.createElement('div');
-        backButton.innerHTML = `
-            <div style="padding: 15px; background: #f8f9fa; border-bottom: 1px solid #ddd;">
-                <a href="index.html" style="display: inline-flex; align-items: center; text-decoration: none; color: #333;">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
-                    হোমপেজে ফিরে যান
-                </a>
-            </div>
-        `;
-        document.body.insertBefore(backButton, document.body.firstChild);
-        
-        // Create a container for the single product
-        const singleProductContainer = document.createElement('div');
-        singleProductContainer.className = 'single-product-view';
-        document.querySelector('main').appendChild(singleProductContainer);
-        
-        // Show the product details
-        openProductDetailModal(product);
-        
-        // Adjust the modal for single product view
-        productDetailModal.style.cssText = 'display: block; position: relative; background: none; z-index: 1;';
-        productDetailModal.classList.add('single-product-modal');
-        document.querySelector('.close-btn').style.display = 'none';
-        
-        // Move the modal content to the single product container
-        singleProductContainer.appendChild(productDetailModal);
-    };
-
-    // Initialize the app
+    // Init
     fetchProducts();
 });
