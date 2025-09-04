@@ -660,6 +660,11 @@ body.modal-open {
     .footer-col ul li {
         justify-content: center;
     }
+
+    /* Adjust related grid for small screens */
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Premium Plus Style Product Detail */
@@ -667,9 +672,6 @@ body.modal-open {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
-    justify-content: center;
-    margin: 0 auto;
-    max-width: 1200px;
 }
 
 .product-detail-images {
@@ -677,7 +679,6 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 100%;
 }
 
 .main-image {
@@ -697,7 +698,6 @@ body.modal-open {
     padding: 5px 0;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    justify-content: center;
 }
 
 .thumbnail-images::-webkit-scrollbar {
@@ -720,7 +720,6 @@ body.modal-open {
 
 .product-detail-info {
     flex: 2 1 400px;
-    max-width: 100%;
 }
 
 .product-title {
@@ -728,7 +727,6 @@ body.modal-open {
     margin-bottom: 15px;
     color: var(--text-color);
     font-weight: 700;
-    text-align: center;
 }
 
 .product-meta {
@@ -738,7 +736,6 @@ body.modal-open {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--border-color);
-    justify-content: center;
 }
 
 .meta-item {
@@ -755,7 +752,6 @@ body.modal-open {
 
 .product-price-section {
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .price-main {
@@ -772,7 +768,6 @@ body.modal-open {
 
 .variant-selector {
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .variant-label {
@@ -787,7 +782,6 @@ body.modal-open {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 15px;
-    justify-content: center;
 }
 
 .variant-option {
@@ -809,7 +803,6 @@ body.modal-open {
     align-items: center;
     margin-bottom: 25px;
     gap: 15px;
-    justify-content: center;
 }
 
 .quantity-label {
@@ -851,7 +844,6 @@ body.modal-open {
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
-    justify-content: center;
 }
 
 .whatsapp-order-btn {
@@ -892,7 +884,6 @@ body.modal-open {
 
 .product-description {
     margin-bottom: 30px;
-    text-align: center;
 }
 
 .description-title {
@@ -907,15 +898,11 @@ body.modal-open {
 .description-content {
     line-height: 1.7;
     color: var(--light-text);
-    text-align: left;
-    max-width: 800px;
-    margin: 0 auto;
 }
 
 .related-products {
     margin-top: 40px;
     width: 100%;
-    text-align: center;
 }
 
 .related-title {
@@ -933,33 +920,20 @@ body.modal-open {
     gap: 20px;
 }
 
-/* Single Product View Styles */
-.single-product-view .product-detail-premium {
-    width: 100%;
-    padding: 20px;
-}
-
-.single-product-view .related-grid {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-@media (min-width: 768px) {
-    .single-product-view .related-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 992px) {
-    .single-product-view .related-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .product-detail-premium {
         flex-direction: column;
-        align-items: center;
+        align-items: center; /* Center-align the content vertically in the column */
+        text-align: center; /* Center-align text */
+    }
+    
+    .product-detail-info {
+        text-align: center;
+    }
+    
+    .product-meta, .variant-options, .quantity-selector, .order-buttons {
+        justify-content: center; /* Center-align flex items */
     }
     
     .order-buttons {
@@ -971,17 +945,9 @@ body.modal-open {
         justify-content: center;
     }
     
-    .product-meta {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .variant-options {
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two products side by side */
         justify-content: center;
-    }
-    
-    .quantity-selector {
-        justify-content: center;
+        text-align: left; /* Keep related product text left-aligned */
     }
 }
