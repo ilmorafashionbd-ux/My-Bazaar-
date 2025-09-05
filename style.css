@@ -859,6 +859,7 @@ body.modal-open {
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
+    justify-content: flex-end; /* Added to move buttons to the right */
 }
 
 .whatsapp-order-btn {
@@ -935,10 +936,10 @@ body.modal-open {
     gap: 20px;
 }
 
-/* New: Related products grid for larger screens */
+/* Updated: Related products grid for larger screens */
 @media (min-width: 992px) {
     .related-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -961,5 +962,19 @@ body.modal-open {
 @media (max-width: 576px) {
     .product-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-col ul li {
+        justify-content: center;
     }
 }
