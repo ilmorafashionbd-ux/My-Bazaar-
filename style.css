@@ -640,25 +640,33 @@ body.modal-open {
     .section-title {
         font-size: 24px;
     }
-    
     .product-detail-premium {
         flex-direction: column;
-        width: 100%;
-        padding: 0 15px;
-        box-sizing: border-box;
+        align-items: center; /* Center-align the content vertically in the column */
+        text-align: center; /* Center-align text */
     }
 
-    .product-detail-images, .product-detail-info {
-        flex: 1 1 100%;
+    .product-detail-info {
+        text-align: center;
+    }
+
+    .product-meta, .variant-options, .quantity-selector, .order-buttons {
+        justify-content: center; /* Center-align flex items */
     }
 
     .order-buttons {
         flex-direction: column;
     }
-    
+
     .whatsapp-order-btn, .messenger-order-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two products side by side */
+        justify-content: center;
+        text-align: left; /* Keep related product text left-aligned */
     }
 }
 
@@ -679,6 +687,11 @@ body.modal-open {
 
     .footer-col ul li {
         justify-content: center;
+    }
+
+    /* Adjust related grid for small screens */
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -859,7 +872,6 @@ body.modal-open {
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
-    justify-content: flex-end; /* Added to move buttons to the right */
 }
 
 .whatsapp-order-btn {
@@ -936,26 +948,35 @@ body.modal-open {
     gap: 20px;
 }
 
-/* Updated: Related products grid for larger screens */
-@media (min-width: 992px) {
-    .related-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .product-detail-premium {
         flex-direction: column;
+        align-items: center; /* Center-align the content vertically in the column */
+        text-align: center; /* Center-align text */
     }
-    
+
+    .product-detail-info {
+        text-align: center;
+    }
+
+    .product-meta, .variant-options, .quantity-selector, .order-buttons {
+        justify-content: center; /* Center-align flex items */
+    }
+
     .order-buttons {
         flex-direction: column;
     }
-    
+
     .whatsapp-order-btn, .messenger-order-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two products side by side */
+        justify-content: center;
+        text-align: left; /* Keep related product text left-aligned */
     }
 }
 
@@ -976,5 +997,10 @@ body.modal-open {
 
     .footer-col ul li {
         justify-content: center;
+    }
+
+    /* Adjust related grid for small screens */
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
