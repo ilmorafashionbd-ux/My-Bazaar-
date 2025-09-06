@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Main JavaScript for handling products, modals, and cart functionality
 document.addEventListener('DOMContentLoaded', () => {
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY7hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
-    const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Shop/images/';
+    const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/';
 
     let allProducts = [];
     let cart = [];
@@ -315,3 +315,216 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }).join('');
+        productDetailContainer.innerHTML = `
+            <div class="product-detail-premium">
+                <div class="product-detail-images">
+                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
+                    ${allImages.length > 1 ? `
+                        <div class="thumbnail-images">
+                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
+                        </div>` : ''}
+                </div>
+                
+                <div class="product-detail-info">
+                    <h2 class="product-title">${product.product_name}</h2>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong> 
+                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                ${product.stock_status || 'In Stock'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-price-section">
+                        <div class="price-main">${product.price}৳</div>
+                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
+                    </div>
+                    
+                    <div class="variant-selector">
+                        <label class="variant-label">Weight / Variant:</label>
+                        <div class="variant-options">
+                            ${variantOptions}
+                        </div>
+                    </div>
+                    
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantity:</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-buttons">
+                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Order
+                        </button>
+                        <button class="messenger-order-btn" id="messenger-order-btn">
+                            <i class="fab fa-facebook-messenger"></i> Messenger Order
+                        </button>
+                    </div>
+                    
+                    <div class="product-description">
+                        <h3 class="description-title">Product Description</h3>
+                        <div class="description-content">
+                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        </div>
+                    </div>
+                </div>
+                
+                ${relatedProducts.length > 0 ? `
+                <div class="related-products">
+                    <h3 class="related-title">Related Products</h3>
+                    <div class="related-grid">
+                        ${relatedProductsHTML}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+
+        productDetailModal.style.display = 'block';
+        document.body.classList.add('modal-open');
+
+        // Thumbnails functionality
+        productDetailContainer.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', e => {
+                document.getElementById('main-product-image').src = e.target.dataset.imgUrl;
+                productDetailContainer.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+
+        // Variant selection
+        const variantOptionsEl = productDetailContainer.querySelectorAll('.variant-option');
+        if (variantOptionsEl.length > 0) {
+            variantOptionsEl[0].classList.add('selected');
+
+            variantOptionsEl.forEach(option => {
+                option.addEventListener('click', () => {
+                    variantOptionsEl.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+        }
+
+        // Quantity controls
+        const quantityInput = productDetailContainer.querySelector('.quantity-input');
+        productDetailContainer.querySelector('.quantity-btn.plus').addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+
+        productDetailContainer.querySelector('.quantity-btn.minus').addEventListener('click', () => {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        });
+
+        // WhatsApp order button
+        productDetailContainer.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            showOrderForm(product, selectedVariant, quantity);
+        });
+
+        // Messenger order button
+        productDetailContainer.querySelector('#messenger-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
+
+            // Open Facebook Messenger with pre-filled message
+            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+
+        // Related products click event
+        productDetailContainer.querySelectorAll('.related-grid .product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const productId = card.dataset.productId;
+                const relatedProduct = allProducts.find(p => p.id == productId);
+                if (relatedProduct) {
+                    showProductDetailModal(relatedProduct);
+                }
+            });
+        });
+
+        history.pushState({ modalOpen: true }, '', '#product-' + product.id);
+    };
+
+    // Close product modal
+    const closeProductDetailModal = () => {
+        productDetailModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    };
+
+    productModalCloseBtn.addEventListener('click', closeProductDetailModal);
+
+    window.addEventListener('popstate', e => {
+        if (!(e.state && e.state.modalOpen)) closeProductDetailModal();
+    });
+
+    // Cart
+    const addToCart = (product) => {
+        const existing = cart.find(p => p.id === product.id);
+        if (existing) existing.quantity++;
+        else cart.push({...product, quantity:1});
+        updateCartCount();
+        alert(`${product.product_name} কার্টে যুক্ত হয়েছে`);
+    };
+
+    const updateCartCount = () => {
+        const total = cart.reduce((s, i) => s + i.quantity, 0);
+        cartCountTop.textContent = total;
+        cartCountBottom.textContent = total;
+    };
+
+    // Order form
+    const showOrderForm = (product, variant = '', quantity = 1) => {
+        const productNameWithVariant = `${product.product_name} ${variant}`.trim();
+        document.getElementById('product-name-input').value = productNameWithVariant;
+        document.getElementById('product-id-input').value = product.id;
+        orderModal.style.display = 'block';
+        document.body.classList.add('modal-open');
+    };
+
+    document.getElementById('order-modal-close').addEventListener('click', () => {
+        orderModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    });
+
+    orderForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const name = document.getElementById('customer-name').value;
+        const address = document.getElementById('customer-address').value;
+        const mobile = document.getElementById('customer-mobile').value;
+        const productName = document.getElementById('product-name-input').value;
+        const productId = document.getElementById('product-id-input').value;
+
+        const msg = `🛒 নতুন অর্ডার!\nপণ্যের নাম: ${productName}\nID: ${productId}\n\nক্রেতা: ${name}\nঠিকানা: ${address}\nমোবাইল: ${mobile}`;
+        window.open(`https://wa.me/8801778095805?text=${encodeURIComponent(msg)}`, '_blank');
+        orderModal.style.display = 'none';
+    });
+
+    // Category filter
+    categoryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const cat = item.dataset.category;
+            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.toLowerCase().replace(/\s/g,'-') === cat);
+            displayProducts(filtered);
+        });
+    });
+
+    // Init
+    fetchProducts();
+});
+
