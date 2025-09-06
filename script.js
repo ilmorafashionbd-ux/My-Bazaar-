@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dynamicTyping: true,
                 complete: (results) => {
                     allProducts = results.data.filter(product => product.id);
-
+                    
                     if (isSingleProductView) {
                         // Show single product view if product ID is in URL
                         const product = allProducts.find(p => p.id == productIdFromUrl);
@@ -106,22 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide elements that are not needed in single product view
         document.querySelector('.banner').style.display = 'none';
         document.querySelector('.categories').style.display = 'none';
-        document.querySelector('.section-title').style.display = 'none';
+        const sectionTitle = document.querySelector('.section-title');
+        if (sectionTitle) sectionTitle.style.display = 'none';
+        const productsSection = document.getElementById('products');
+        if (productsSection) productsSection.style.padding = '0';
         document.querySelector('.footer').style.marginBottom = '0';
-
+        
         // Change page title
         document.title = `${product.product_name} - Ilmora Fashion BD`;
-
+        
         const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
         const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
         const allImages = [mainImageUrl, ...otherImages];
-
+        
         // Generate variant options if available
         const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
-
+        
         // Generate related products
         const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
         const relatedProductsHTML = relatedProducts.map(p => {
@@ -223,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
-
+        
         // Thumbnails functionality
         document.querySelectorAll('.thumbnail').forEach(thumb => {
             thumb.addEventListener('click', e => {
@@ -237,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const variantOptionsEl = document.querySelectorAll('.variant-option');
         if (variantOptionsEl.length > 0) {
             variantOptionsEl[0].classList.add('selected');
-
+            
             variantOptionsEl.forEach(option => {
                 option.addEventListener('click', () => {
                     variantOptionsEl.forEach(o => o.classList.remove('selected'));
@@ -251,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.quantity-btn.plus').addEventListener('click', () => {
             quantityInput.value = parseInt(quantityInput.value) + 1;
         });
-
+        
         document.querySelector('.quantity-btn.minus').addEventListener('click', () => {
             if (parseInt(quantityInput.value) > 1) {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
@@ -270,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
             const quantity = quantityInput.value;
             const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
-
+            
             // Open Facebook Messenger with pre-filled message
             const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
             window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
@@ -291,13 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
         const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
         const allImages = [mainImageUrl, ...otherImages];
-
+        
         // Generate variant options if available
         const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
-
+        
         // Generate related products
         const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
         const relatedProductsHTML = relatedProducts.map(p => {
@@ -392,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ` : ''}
             </div>
         `;
-
+        
         productDetailModal.style.display = 'block';
         document.body.classList.add('modal-open');
 
@@ -409,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const variantOptionsEl = productDetailContainer.querySelectorAll('.variant-option');
         if (variantOptionsEl.length > 0) {
             variantOptionsEl[0].classList.add('selected');
-
+            
             variantOptionsEl.forEach(option => {
                 option.addEventListener('click', () => {
                     variantOptionsEl.forEach(o => o.classList.remove('selected'));
@@ -423,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productDetailContainer.querySelector('.quantity-btn.plus').addEventListener('click', () => {
             quantityInput.value = parseInt(quantityInput.value) + 1;
         });
-
+        
         productDetailContainer.querySelector('.quantity-btn.minus').addEventListener('click', () => {
             if (parseInt(quantityInput.value) > 1) {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
@@ -442,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
             const quantity = quantityInput.value;
             const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
-
+            
             // Open Facebook Messenger with pre-filled message
             const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
             window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
@@ -528,4 +531,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Init
     fetchProducts();
 });
-
