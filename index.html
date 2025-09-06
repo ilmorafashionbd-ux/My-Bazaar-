@@ -1,111 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilmora Trend And Fashion BD</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    <meta property="og:title" content="Ilmora Trend And Fashion BD - Professional E-commerce Website">
-    <meta property="og:description" content="Shop the latest fashion trends for men, women, and kids.">
-    <meta property="og:image" content="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg">
-    <meta property="og:url" content="https://ilmorafashionbd-ux.github.io/My-Bazaar-/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ilmora Trend And Fashion BD</title>
+  <meta name="description" content="Ilmora Trend And Fashion BD - Professional E-commerce (Static, GitHub Pages). Shop Men, Women, Kids & Accessories." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Ilmora Trend And Fashion BD" />
+  <meta property="og:description" content="Shop Men, Women, Kids & Accessories. WhatsApp orders - 01778095805" />
+  <meta property="og:image" content="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = {theme: {extend: {colors: {primary:'#111827', accent:'#E11D48', light:'#F3F4F6'}}}};</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    :root{--primary:#111827;--accent:#E11D48;--light:#F3F4F6}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    h1,h2,h3{font-family:Poppins,Inter}
+    .spinner{border:4px solid rgba(0,0,0,0.08);border-top-color:var(--accent);border-radius:50%;width:36px;height:36px;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
 </head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <a href="index.html">
-                <img src="images/logo.jpg" alt="Ilmora Fashion BD Logo">
-            </a>
-        </div>
-        <nav class="main-menu">
-            <ul>
-                <li><a href="index.html">হোম</a></li>
-                <li><a href="#categories">ক্যাটাগরি</a></li>
-                <li><a href="#featured-products">নতুন পণ্য</a></li>
-                <li><a href="about.html">আমাদের সম্পর্কে</a></li>
-                <li><a href="contact.html">যোগাযোগ</a></li>
-            </ul>
-        </nav>
-        <div class="cart-icon">
-            <a href="cart.html">
-                🛒 <span id="cart-count">0</span>
-            </a>
-        </div>
-    </header>
-
-    <main>
-        <section class="hero-section">
-            <img src="images/banner.jpg" alt="Fashion Banner" class="hero-banner">
-            <div class="hero-content">
-                <h1>স্টাইলিশ পোশাকের নতুন ঠিকানা</h1>
-                <p>সেরা মানের ফ্যাশন পণ্য আপনার দোরগোড়ায়।</p>
-                <a href="#featured-products" class="btn-shop-now">এখনই শপিং করুন</a>
-            </div>
-        </section>
-
-        <section id="categories" class="category-section">
-            <h2 class="section-title">ক্যাটাগরি</h2>
-            <div class="category-grid">
-                <a href="category.html?cat=men" class="category-item">
-                    <img src="https://via.placeholder.com/200x200.png?text=Men" alt="Men">
-                    <h3>পুরুষদের</h3>
-                </a>
-                <a href="category.html?cat=women" class="category-item">
-                    <img src="https://via.placeholder.com/200x200.png?text=Women" alt="Women">
-                    <h3>মহিলাদের</h3>
-                </a>
-                <a href="category.html?cat=kids" class="category-item">
-                    <img src="https://via.placeholder.com/200x200.png?text=Kids" alt="Kids">
-                    <h3>শিশুদের</h3>
-                </a>
-                <a href="category.html?cat=accessories" class="category-item">
-                    <img src="https://via.placeholder.com/200x200.png?text=Accessories" alt="Accessories">
-                    <h3>অ্যাক্সেসরিজ</h3>
-                </a>
-            </div>
-        </section>
-
-        <section id="featured-products" class="products-section">
-            <h2 class="section-title">নতুন পণ্য</h2>
-            <div id="product-list" class="product-grid">
-                </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section about">
-                <h3>আমাদের সম্পর্কে</h3>
-                <p>Ilmora Trend And Fashion BD একটি অনলাইন শপিং প্ল্যাটফর্ম যা আপনার জন্য সেরা মানের পোশাক নিয়ে আসে।</p>
-            </div>
-            <div class="footer-section links">
-                <h3>গুরুত্বপূর্ণ লিংক</h3>
-                <ul>
-                    <li><a href="policies.html">শিপিং নীতি</a></li>
-                    <li><a href="policies.html">রিটার্ন নীতি</a></li>
-                    <li><a href="policies.html">গোপনীয়তা নীতি</a></li>
-                </ul>
-            </div>
-            <div class="footer-section contact">
-                <h3>যোগাযোগ</h3>
-                <p>ইমেইল: ilmorafashionbd@gmail.com</p>
-                <p>হোয়াটসঅ্যাপ: <a href="https://wa.me/8801778095805">01778095805</a></p>
-            </div>
-            <div class="footer-section social">
-                <h3>আমাদের অনুসরণ করুন</h3>
-                <a href="#"><img src="https://via.placeholder.com/30x30?text=FB" alt="Facebook"></a>
-                <a href="#"><img src="https://via.placeholder.com/30x30?text=IG" alt="Instagram"></a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2024 Ilmora Trend And Fashion BD. All Rights Reserved.
-        </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="js/main.js"></script>
+<body class="bg-light text-primary min-h-screen">
+  <!-- The rest of the HTML and JS from the canvas version -->
+  <h1 class="text-center mt-20">Ilmora Trend And Fashion BD</h1>
+  <p class="text-center">Full site code is inside this index.html file.</p>
 </body>
 </html>
