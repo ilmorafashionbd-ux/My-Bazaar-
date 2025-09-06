@@ -1,1 +1,226 @@
+/* Universal Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+    background-color: #F3F4F6;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    color: #111827;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.logo img {
+    height: 50px;
+}
+.main-menu ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+.main-menu a {
+    text-decoration: none;
+    color: #111827;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.main-menu a:hover {
+    color: #E11D48;
+}
+.cart-icon a {
+    text-decoration: none;
+    color: #111827;
+    font-size: 1.5rem;
+    position: relative;
+}
+#cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #E11D48;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+.hero-banner {
+    width: 100%;
+    height: auto;
+}
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(17, 24, 39, 0.7);
+    padding: 2rem;
+    border-radius: 10px;
+}
+.hero-content h1 {
+    font-size: 3rem;
+    color: #fff;
+}
+.hero-content p {
+    font-size: 1.2rem;
+    margin: 1rem 0 2rem;
+    color: #F3F4F6;
+}
+.btn-shop-now {
+    text-decoration: none;
+    background-color: #E11D48;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+.btn-shop-now:hover {
+    background-color: #b91c42;
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 5%;
+}
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+}
+.product-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.product-info h3 {
+    margin: 1rem 0 0.5rem;
+}
+.product-price {
+    color: #E11D48;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.btn-view-details, .btn-add-to-cart {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+.btn-view-details {
+    background-color: #111827;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+.btn-view-details:hover {
+    background-color: #2c3a51;
+}
+.btn-add-to-cart {
+    background-color: #E11D48;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn-add-to-cart:hover {
+    background-color: #b91c42;
+}
+
+/* Footer */
+.footer {
+    background-color: #111827;
+    color: #F3F4F6;
+    padding: 3rem 5%;
+    margin-top: 3rem;
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+.footer-section h3 {
+    color: #E11D48;
+    margin-bottom: 1rem;
+}
+.footer-section p, .footer-section a {
+    color: #aaa;
+    text-decoration: none;
+}
+.footer-section ul {
+    list-style: none;
+}
+.footer-section li {
+    margin-bottom: 0.5rem;
+}
+.footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .main-menu ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
 
