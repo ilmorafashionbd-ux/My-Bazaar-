@@ -3,177 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilmora Fashion BD - Your Trusted Online Shop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>Ilmora Trend And Fashion BD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Ilmora Trend And Fashion BD - Professional E-commerce Website">
+    <meta property="og:description" content="Shop the latest fashion trends for men, women, and kids.">
+    <meta property="og:image" content="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg">
+    <meta property="og:url" content="https://ilmorafashionbd-ux.github.io/My-Bazaar-/">
 </head>
 <body>
-
     <header class="header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/logo.png" alt="Ilmora Fashion Logo">
-                <span>Ilmora Fashion</span>
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/logo.jpg" alt="Ilmora Fashion BD Logo">
             </a>
-            <nav class="navbar">
-                <a href="#home">হোম</a>
-                <a href="#products">শপ</a>
-                <a href="#footer">যোগাযোগ</a>
-            </nav>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">0</span>
-            </div>
-            <div class="menu-btn">
-                <i class="fas fa-bars"></i>
-            </div>
+        </div>
+        <nav class="main-menu">
+            <ul>
+                <li><a href="index.html">হোম</a></li>
+                <li><a href="#categories">ক্যাটাগরি</a></li>
+                <li><a href="#featured-products">নতুন পণ্য</a></li>
+                <li><a href="about.html">আমাদের সম্পর্কে</a></li>
+                <li><a href="contact.html">যোগাযোগ</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <a href="cart.html">
+                🛒 <span id="cart-count">0</span>
+            </a>
         </div>
     </header>
 
     <main>
-        <section id="home" class="banner">
-            <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Website Banner">
+        <section class="hero-section">
+            <img src="images/banner.jpg" alt="Fashion Banner" class="hero-banner">
+            <div class="hero-content">
+                <h1>স্টাইলিশ পোশাকের নতুন ঠিকানা</h1>
+                <p>সেরা মানের ফ্যাশন পণ্য আপনার দোরগোড়ায়।</p>
+                <a href="#featured-products" class="btn-shop-now">এখনই শপিং করুন</a>
+            </div>
         </section>
 
-        <section class="categories">
-            <div class="container">
-                <h2 class="section-title">পণ্যের ক্যাটাগরি</h2>
-                <div class="category-grid">
-                    <div class="category-item" data-category="all">
-                        <i class="fas fa-globe"></i>
-                        <span>সকল পণ্য</span>
-                    </div>
-                    <div class="category-item" data-category="electronics">
-                        <i class="fas fa-laptop"></i>
-                        <span>ইলেকট্রনিক্স</span>
-                    </div>
-                    <div class="category-item" data-category="mens-fashion">
-                        <i class="fas fa-male"></i>
-                        <span>পুরুষদের ফ্যাশন</span>
-                    </div>
-                    <div class="category-item" data-category="womens-fashion">
-                        <i class="fas fa-female"></i>
-                        <span>মহিলাদের ফ্যাশন</span>
-                    </div>
-                     <div class="category-item" data-category="books">
-                        <i class="fas fa-book-open"></i>
-                        <span>বই ও স্টেশনারি</span>
-                    </div>
-                    <div class="category-item" data-category="home-living">
-                        <i class="fas fa-couch"></i>
-                        <span>ঘর ও সজ্জা</span>
-                    </div>
-                    <div class="category-item" data-category="wearables">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>স্মার্ট গ্যাজেট</span>
-                    </div>
-                    <div class="category-item" data-category="kids-baby">
-                        <i class="fas fa-baby"></i>
-                        <span>শিশু পণ্য</span>
-                    </div>
+        <section id="categories" class="category-section">
+            <h2 class="section-title">ক্যাটাগরি</h2>
+            <div class="category-grid">
+                <a href="category.html?cat=men" class="category-item">
+                    <img src="https://via.placeholder.com/200x200.png?text=Men" alt="Men">
+                    <h3>পুরুষদের</h3>
+                </a>
+                <a href="category.html?cat=women" class="category-item">
+                    <img src="https://via.placeholder.com/200x200.png?text=Women" alt="Women">
+                    <h3>মহিলাদের</h3>
+                </a>
+                <a href="category.html?cat=kids" class="category-item">
+                    <img src="https://via.placeholder.com/200x200.png?text=Kids" alt="Kids">
+                    <h3>শিশুদের</h3>
+                </a>
+                <a href="category.html?cat=accessories" class="category-item">
+                    <img src="https://via.placeholder.com/200x200.png?text=Accessories" alt="Accessories">
+                    <h3>অ্যাক্সেসরিজ</h3>
+                </a>
+            </div>
+        </section>
+
+        <section id="featured-products" class="products-section">
+            <h2 class="section-title">নতুন পণ্য</h2>
+            <div id="product-list" class="product-grid">
                 </div>
-            </div>
         </section>
-
-        <section id="products" class="products">
-            <div class="container">
-                <h2 class="section-title">আমাদের সকল প্রোডাক্ট</h2>
-                <div id="product-grid" class="product-grid">
-                    </div>
-            </div>
-        </section>
-
-        <div id="product-detail-modal" class="modal">
-            <div class="modal-content product-detail-content">
-                <span class="close-btn" id="product-modal-close">&times;</span>
-                <div id="product-detail-container">
-                    </div>
-            </div>
-        </div>
-
-        <div id="order-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn order-close-btn" id="order-modal-close">&times;</span>
-                <h2 class="form-title">অর্ডার কনফার্ম করুন</h2>
-                <form id="order-form">
-                    <input type="hidden" id="product-name-input">
-                    <input type="hidden" id="product-id-input">
-                    <div class="form-group">
-                        <label for="customer-name">আপনার নাম</label>
-                        <input type="text" id="customer-name" placeholder="আপনার নাম লিখুন" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customer-address">সম্পূর্ণ ঠিকানা</label>
-                        <input type="text" id="customer-address" placeholder="আপনার সম্পূর্ণ ঠিকানা দিন" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="customer-mobile">মোবাইল নম্বর</label>
-                        <input type="tel" id="customer-mobile" placeholder="আপনার মোবাইল নম্বর দিন" required>
-                    </div>
-                    <button type="submit" class="submit-btn">হোয়াটসঅ্যাপে অর্ডার করুন</button>
-                </form>
-            </div>
-        </div>
-
     </main>
 
-    <footer id="footer" class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>গুরুত্বপূর্ণ লিংক</h4>
-                    <ul>
-                        <li><a href="#home"><i class="fas fa-link"></i> হোম পেজ</a></li>
-                        <li><a href="#products"><i class="fas fa-link"></i> শপ পেজ</a></li>
-                        <li><a href="#footer"><i class="fas fa-link"></i> যোগাযোগ পেজ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>আমাদের সাথে যোগাযোগ করুন</h4>
-                    <ul>
-                        <li><i class="fab fa-whatsapp"></i> 01778095805</li>
-                        <li><i class="fas fa-envelope"></i> ilmorafashionbd@gmail.com</li>
-                        <li><i class="fas fa-map-marker-alt"></i> ঢাকা, বাংলাদেশ</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>সোশ্যাল প্রোফাইল</h4>
-                    <div class="social-icons">
-                        <a href="https://www.facebook.com/profile.php?id=61578353266944" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    </div>
-                </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>আমাদের সম্পর্কে</h3>
+                <p>Ilmora Trend And Fashion BD একটি অনলাইন শপিং প্ল্যাটফর্ম যা আপনার জন্য সেরা মানের পোশাক নিয়ে আসে।</p>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Ilmora Fashion. All Rights Reserved.</p>
+            <div class="footer-section links">
+                <h3>গুরুত্বপূর্ণ লিংক</h3>
+                <ul>
+                    <li><a href="policies.html">শিপিং নীতি</a></li>
+                    <li><a href="policies.html">রিটার্ন নীতি</a></li>
+                    <li><a href="policies.html">গোপনীয়তা নীতি</a></li>
+                </ul>
             </div>
+            <div class="footer-section contact">
+                <h3>যোগাযোগ</h3>
+                <p>ইমেইল: ilmorafashionbd@gmail.com</p>
+                <p>হোয়াটসঅ্যাপ: <a href="https://wa.me/8801778095805">01778095805</a></p>
+            </div>
+            <div class="footer-section social">
+                <h3>আমাদের অনুসরণ করুন</h3>
+                <a href="#"><img src="https://via.placeholder.com/30x30?text=FB" alt="Facebook"></a>
+                <a href="#"><img src="https://via.placeholder.com/30x30?text=IG" alt="Instagram"></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 Ilmora Trend And Fashion BD. All Rights Reserved.
         </div>
     </footer>
 
-    <div class="bottom-nav">
-        <a href="#home" class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>হোম</span>
-        </a>
-        <a href="#products" class="nav-item">
-            <i class="fas fa-th-large"></i>
-            <span>ক্যাটাগরি</span>
-        </a>
-        <div class="nav-item cart-btn-bottom">
-            <i class="fas fa-shopping-cart"></i>
-            <span>কার্ট</span>
-            <span class="cart-count-bottom">0</span>
-        </div>
-        <a href="https://wa.me/8801778095805" target="_blank" class="nav-item">
-            <i class="fab fa-whatsapp"></i>
-            <span>হোয়াটসঅ্যাপ</span>
-        </a>
-        <a href="https://www.facebook.com/messages/t/61578353266944" target="_blank" class="nav-item">
-            <i class="fab fa-facebook-messenger"></i>
-            <span>মেসেঞ্জার</span>
-        </a>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
