@@ -419,7 +419,7 @@ body.modal-open {
 }
 
 .related-products {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .related-products h3 {
@@ -689,7 +689,7 @@ body.modal-open {
         justify-content: center;
     }
 }
-
+ 
 /* Premium Plus Style Product Detail */
 .product-detail-premium {
     display: flex;
@@ -993,4 +993,6 @@ body.modal-open {
     .footer-col ul li {
         justify-content: center;
     }
+}
+ 
 }
