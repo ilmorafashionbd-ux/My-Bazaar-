@@ -315,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }).join('');
+
         productDetailContainer.innerHTML = `
             <div class="product-detail-premium">
                 <div class="product-detail-images">
