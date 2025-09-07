@@ -146,66 +146,68 @@ document.addEventListener('DOMContentLoaded', () => {
         // Replace product grid with single product view
         productGrid.innerHTML = `
             <div class="product-detail-premium">
-                <div class="product-detail-images">
-                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
-                    ${allImages.length > 1 ? `
-                        <div class="thumbnail-images">
-                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
-                        </div>` : ''}
-                </div>
-                
-                <div class="product-detail-info">
-                    <h2 class="product-title">${product.product_name}</h2>
-                    
-                    <div class="product-meta">
-                        <div class="meta-item">
-                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Status:</strong> 
-                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
-                                ${product.stock_status || 'In Stock'}
-                            </span>
-                        </div>
+                <div class="product-detail-top">
+                    <div class="product-detail-images">
+                        <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
+                        ${allImages.length > 1 ? `
+                            <div class="thumbnail-images">
+                                ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
+                            </div>` : ''}
                     </div>
                     
-                    <div class="product-price-section">
-                        <div class="price-main">${product.price}৳</div>
-                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
-                    </div>
-                    
-                    <div class="variant-selector">
-                        <label class="variant-label">Weight / Variant:</label>
-                        <div class="variant-options">
-                            ${variantOptions}
+                    <div class="product-detail-info">
+                        <h2 class="product-title">${product.product_name}</h2>
+                        
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Status:</strong> 
+                                <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                    ${product.stock_status || 'In Stock'}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="quantity-selector">
-                        <span class="quantity-label">Quantity:</span>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                            <button class="quantity-btn plus">+</button>
+                        
+                        <div class="product-price-section">
+                            <div class="price-main">${product.price}৳</div>
+                            ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                         </div>
-                    </div>
-                    
-                    <div class="order-buttons">
-                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Order
-                        </button>
-                        <button class="messenger-order-btn" id="messenger-order-btn">
-                            <i class="fab fa-facebook-messenger"></i> Messenger Order
-                        </button>
-                    </div>
-                    
-                    <div class="product-description">
-                        <h3 class="description-title">Product Description</h3>
-                        <div class="description-content">
-                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        
+                        <div class="variant-selector">
+                            <label class="variant-label">Weight / Variant:</label>
+                            <div class="variant-options">
+                                ${variantOptions}
+                            </div>
+                        </div>
+                        
+                        <div class="quantity-selector">
+                            <span class="quantity-label">Quantity:</span>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1">
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="order-buttons">
+                            <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Order
+                            </button>
+                            <button class="messenger-order-btn" id="messenger-order-btn">
+                                <i class="fab fa-facebook-messenger"></i> Messenger Order
+                            </button>
+                        </div>
+                        
+                        <div class="product-description">
+                            <h3 class="description-title">Product Description</h3>
+                            <div class="description-content">
+                                ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -321,66 +323,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         productDetailContainer.innerHTML = `
             <div class="product-detail-premium">
-                <div class="product-detail-images">
-                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
-                    ${allImages.length > 1 ? `
-                        <div class="thumbnail-images">
-                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
-                        </div>` : ''}
-                </div>
-                
-                <div class="product-detail-info">
-                    <h2 class="product-title">${product.product_name}</h2>
-                    
-                    <div class="product-meta">
-                        <div class="meta-item">
-                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Status:</strong> 
-                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
-                                ${product.stock_status || 'In Stock'}
-                            </span>
-                        </div>
+                <div class="product-detail-top">
+                    <div class="product-detail-images">
+                        <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
+                        ${allImages.length > 1 ? `
+                            <div class="thumbnail-images">
+                                ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
+                            </div>` : ''}
                     </div>
                     
-                    <div class="product-price-section">
-                        <div class="price-main">${product.price}৳</div>
-                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
-                    </div>
-                    
-                    <div class="variant-selector">
-                        <label class="variant-label">Weight / Variant:</label>
-                        <div class="variant-options">
-                            ${variantOptions}
+                    <div class="product-detail-info">
+                        <h2 class="product-title">${product.product_name}</h2>
+                        
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <strong>Status:</strong> 
+                                <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                    ${product.stock_status || 'In Stock'}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="quantity-selector">
-                        <span class="quantity-label">Quantity:</span>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                            <button class="quantity-btn plus">+</button>
+                        
+                        <div class="product-price-section">
+                            <div class="price-main">${product.price}৳</div>
+                            ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                         </div>
-                    </div>
-                    
-                    <div class="order-buttons">
-                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Order
-                        </button>
-                        <button class="messenger-order-btn" id="messenger-order-btn">
-                            <i class="fab fa-facebook-messenger"></i> Messenger Order
-                        </button>
-                    </div>
-                    
-                    <div class="product-description">
-                        <h3 class="description-title">Product Description</h3>
-                        <div class="description-content">
-                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        
+                        <div class="variant-selector">
+                            <label class="variant-label">Weight / Variant:</label>
+                            <div class="variant-options">
+                                ${variantOptions}
+                            </div>
+                        </div>
+                        
+                        <div class="quantity-selector">
+                            <span class="quantity-label">Quantity:</span>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1">
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="order-buttons">
+                            <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Order
+                            </button>
+                            <button class="messenger-order-btn" id="messenger-order-btn">
+                                <i class="fab fa-facebook-messenger"></i> Messenger Order
+                            </button>
+                        </div>
+                        
+                        <div class="product-description">
+                            <h3 class="description-title">Product Description</h3>
+                            <div class="description-content">
+                                ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                            </div>
                         </div>
                     </div>
                 </div>
