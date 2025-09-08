@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCountTop = document.querySelector('.cart-count');
     const cartCountBottom = document.querySelector('.cart-count-bottom');
     const categoryItems = document.querySelectorAll('.category-item');
+    const relatedProductsSection = document.querySelector('.related-products');
+    const relatedProductsGrid = document.getElementById('related-products-grid');
 
     // Check if URL has product ID parameter for single product view
     const urlParams = new URLSearchParams(window.location.search);
@@ -48,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const product = allProducts.find(p => p.id == productIdFromUrl);
                         if (product) {
                             showSingleProductView(product);
+                            // After showing single product, display related products
+                            displayRelatedProducts(product);
                         } else {
                             document.body.innerHTML = '<div class="container"><p>পণ্যটি পাওয়া যায়নি। <a href="index.html">হোমপেজে ফিরে যান</a></p></div>';
                         }
@@ -64,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Display products on homepage
-    const displayProducts = (productsToDisplay) => {
-        productGrid.innerHTML = '';
+    const displayProducts = (productsToDisplay, targetGrid = productGrid) => {
+        targetGrid.innerHTML = '';
         if (productsToDisplay.length === 0) {
-            productGrid.innerHTML = '<p>এই ক্যাটাগরিতে কোনো পণ্য নেই।</p>';
+            targetGrid.innerHTML = '<p>এই ক্যাটাগরিতে কোনো পণ্য নেই।</p>';
             return;
         }
 
@@ -92,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="product-price">${product.price}৳</div>
                 </div>
             `;
-            productGrid.appendChild(productCard);
+            targetGrid.appendChild(productCard);
 
             productCard.addEventListener('click', () => {
                 // Redirect to single product view
@@ -248,6 +252,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
             window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
         });
+    };
+
+    // Function to display related products
+    const displayRelatedProducts = (currentProduct) => {
+        const related = allProducts.filter(p => 
+            p.category === currentProduct.category && p.id !== currentProduct.id
+        );
+
+        if (related.length > 0) {
+            relatedProductsSection.style.display = 'block';
+            displayProducts(related, relatedProductsGrid);
+        } else {
+            relatedProductsSection.style.display = 'none';
+        }
     };
 
     // Show product detail in modal (for homepage)
