@@ -884,6 +884,27 @@ body.modal-open {
     color: var(--light-text);
 }
 
+/* Related products section specific styles */
+.related-products {
+    padding: 0 0 40px 0;
+}
+
+.related-products .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 992px) {
+    .related-products .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .related-products .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .product-detail-premium {
