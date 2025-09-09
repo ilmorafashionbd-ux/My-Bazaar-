@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Main JavaScript for handling products, modals, and cart functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY7hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY5hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
     const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Shop/images/';
 
     let allProducts = [];
@@ -170,12 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="order-btn-updated" id="new-order-btn">অর্ডার করুন</button>
                         <button class="add-to-cart-btn" id="add-to-cart-btn">অ্যাড টু কার্ট</button>
                     </div>
-                </div>
-            </div>
-            <div class="product-details-section">
-                <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
-                <div class="details-content">
-                    ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                    <div class="product-details-section">
+                        <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
+                        <div class="details-content">
+                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -298,12 +298,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="order-btn-updated" id="new-order-btn">অর্ডার করুন</button>
                         <button class="add-to-cart-btn" id="add-to-cart-btn">অ্যাড টু কার্ট</button>
                     </div>
-                </div>
-            </div>
-            <div class="product-details-section">
-                <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
-                <div class="details-content">
-                    ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                    <div class="product-details-section">
+                        <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
+                        <div class="details-content">
+                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
