@@ -175,6 +175,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="quantity-btn plus">+</button>
                         </div>
                     </div>
+
+                    <div class="order-buttons">
+                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Order
+                        </button>
+                        <button class="messenger-order-btn" id="messenger-order-btn">
+                            <i class="fab fa-facebook-messenger"></i> Messenger Order
+                        </button>
+                    </div>
                     
                     <div class="product-description">
                         <h3 class="description-title">Product Description</h3>
@@ -225,7 +234,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
             }
         });
+        
+        // New: WhatsApp and Messenger buttons functionality for single product view
+        document.getElementById('whatsapp-order-btn').addEventListener('click', () => {
+            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = document.querySelector('.quantity-input').value;
+            showOrderForm(product, selectedVariant, quantity);
+        });
 
+        document.getElementById('messenger-order-btn').addEventListener('click', () => {
+            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = document.querySelector('.quantity-input').value;
+            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
+            
+            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
     };
 
     // Function to display related products
