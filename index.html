@@ -35,81 +35,114 @@
             <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Website Banner">
         </section>
 
-        <section id="products" class="products">
+        <section class="categories">
             <div class="container">
-                <h2 class="section-title">আমাদের সকল পণ্য</h2>
-                <div class="categories">
-                    <div class="category-items">
-                        <div class="category-item active" data-category="all">সকল</div>
-                        <div class="category-item" data-category="dry-food">ড্রাই ফুড</div>
-                        <div class="category-item" data-category="perfume">পারফিউম</div>
-                        <div class="category-item" data-category="clothes">কাপড়</div>
+                <h2 class="section-title">পণ্যের ক্যাটাগরি</h2>
+                <div class="category-grid">
+                    <div class="category-item" data-category="all">
+                        <i class="fas fa-globe"></i>
+                        <span>সকল পণ্য</span>
+                    </div>
+                    <div class="category-item" data-category="electronics">
+                        <i class="fas fa-laptop"></i>
+                        <span>ইলেকট্রনিক্স</span>
+                    </div>
+                    <div class="category-item" data-category="mens-fashion">
+                        <i class="fas fa-male"></i>
+                        <span>পুরুষদের ফ্যাশন</span>
+                    </div>
+                    <div class="category-item" data-category="womens-fashion">
+                        <i class="fas fa-female"></i>
+                        <span>মহিলাদের ফ্যাশন</span>
+                    </div>
+                     <div class="category-item" data-category="books">
+                        <i class="fas fa-book-open"></i>
+                        <span>বই ও স্টেশনারি</span>
+                    </div>
+                    <div class="category-item" data-category="home-living">
+                        <i class="fas fa-couch"></i>
+                        <span>ঘর ও সজ্জা</span>
+                    </div>
+                    <div class="category-item" data-category="wearables">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>স্মার্ট গ্যাজেট</span>
+                    </div>
+                    <div class="category-item" data-category="kids-baby">
+                        <i class="fas fa-baby"></i>
+                        <span>শিশু পণ্য</span>
                     </div>
                 </div>
-                <div class="product-grid" id="product-grid">
+            </div>
+        </section>
+
+        <section id="products" class="products">
+            <div class="container">
+                <h2 class="section-title">আমাদের সকল প্রোডাক্ট</h2>
+                <div id="product-grid" class="product-grid">
                     </div>
             </div>
         </section>
 
         <section class="related-products" style="display: none;">
             <div class="container">
-                <h2 class="section-title">সংশ্লিষ্ট পণ্য</h2>
-                <div class="product-grid" id="related-products-grid">
+                <h2 class="section-title">সংশ্লিষ্ট পণ্যসমূহ</h2>
+                <div id="related-products-grid" class="product-grid">
                     </div>
             </div>
         </section>
+
+        <div id="product-detail-modal" class="modal">
+            <div class="modal-content product-detail-content">
+                <span class="close-btn" id="product-modal-close">&times;</span>
+                <div id="product-detail-container">
+                    </div>
+            </div>
+        </div>
+
+        <div id="order-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn order-close-btn" id="order-modal-close">&times;</span>
+                <h2 class="form-title">অর্ডার কনফার্ম করুন</h2>
+                <form id="order-form">
+                    <input type="hidden" id="product-name-input">
+                    <input type="hidden" id="product-id-input">
+                    <div class="form-group">
+                        <label for="customer-name">আপনার নাম</label>
+                        <input type="text" id="customer-name" placeholder="আপনার নাম লিখুন" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">সম্পূর্ণ ঠিকানা</label>
+                        <input type="text" id="customer-address" placeholder="আপনার সম্পূর্ণ ঠিকানা দিন" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-mobile">মোবাইল নম্বর</label>
+                        <input type="tel" id="customer-mobile" placeholder="আপনার মোবাইল নম্বর দিন" required>
+                    </div>
+                    <button type="submit" class="submit-btn">হোয়াটসঅ্যাপে অর্ডার করুন</button>
+                </form>
+            </div>
+        </div>
+
     </main>
-
-    <div id="product-detail-modal" class="modal">
-        <div class="modal-content product-detail-modal-content">
-            <span class="close-btn" id="product-modal-close">&times;</span>
-            <div id="product-detail-container">
-                </div>
-        </div>
-    </div>
-
-    <div id="order-modal" class="modal">
-        <div class="modal-content order-modal-content">
-            <span class="close-btn" id="order-modal-close">&times;</span>
-            <h3>অর্ডার ফর্ম</h3>
-            <form id="order-form">
-                <div class="form-group">
-                    <label for="customer-name">আপনার নাম</label>
-                    <input type="text" id="customer-name" name="customerName" required>
-                </div>
-                <div class="form-group">
-                    <label for="customer-address">আপনার ঠিকানা</label>
-                    <textarea id="customer-address" name="customerAddress" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="customer-mobile">আপনার মোবাইল নাম্বার</label>
-                    <input type="tel" id="customer-mobile" name="customerMobile" required>
-                </div>
-                <input type="hidden" id="product-name-input" name="productName">
-                <input type="hidden" id="product-id-input" name="productId">
-                <button type="submit" class="submit-btn">অর্ডার কনফার্ম করুন</button>
-            </form>
-        </div>
-    </div>
 
     <footer id="footer" class="footer">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>দ্রুত লিংক</h4>
+                    <h4>গুরুত্বপূর্ণ লিংক</h4>
                     <ul>
-                        <li><a href="#home">হোম</a></li>
-                        <li><a href="#products">শপ</a></li>
-                        <li><a href="#">যোগাযোগ</a></li>
-                        <li><a href="#">প্রাইভেসি পলিসি</a></li>
+                        <li><a href="#home"><i class="fas fa-link"></i> হোম পেজ</a></li>
+                        <li><a href="#products"><i class="fas fa-link"></i> শপ পেজ</a></li>
+                        <li><a href="#footer"><i class="fas fa-link"></i> যোগাযোগ পেজ</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>যোগাযোগ</h4>
-                    <p>
-                        মোবাইল: +8801778095805<br>
-                        ইমেইল: info@ilmora.com
-                    </p>
+                    <h4>আমাদের সাথে যোগাযোগ করুন</h4>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i> 01778095805</li>
+                        <li><i class="fas fa-envelope"></i> ilmorafashionbd@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> ঢাকা, বাংলাদেশ</li>
+                    </ul>
                 </div>
                 <div class="footer-col">
                     <h4>সোশ্যাল প্রোফাইল</h4>
@@ -148,7 +181,7 @@
         </a>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
