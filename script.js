@@ -225,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
             }
         });
+
     };
 
     // Function to display related products
@@ -302,6 +303,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     
+                    <div class="order-buttons">
+                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp Order
+                        </button>
+                        <button class="messenger-order-btn" id="messenger-order-btn">
+                            <i class="fab fa-facebook-messenger"></i> Messenger Order
+                        </button>
+                    </div>
+                    
                     <div class="product-description">
                         <h3 class="description-title">Product Description</h3>
                         <div class="description-content">
@@ -349,6 +359,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // WhatsApp order button
+        productDetailContainer.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            showOrderForm(product, selectedVariant, quantity);
+        });
+
+        // Messenger order button
+        productDetailContainer.querySelector('#messenger-order-btn').addEventListener('click', () => {
+            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
+            const quantity = quantityInput.value;
+            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
+            
+            // Open Facebook Messenger with pre-filled message
+            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
+            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
+        });
         history.pushState({ modalOpen: true }, '', '#product-' + product.id);
     };
 
