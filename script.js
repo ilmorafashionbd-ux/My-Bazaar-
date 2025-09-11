@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Main JavaScript for handling products, modals, and cart functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY5hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRDl-cw7a6X_kIJh_e6Q_lIllD9_9R_IXPnCCs3HCGMhTHD9OG67rqKT2NGiHmY7hsSyeZ9sM6urutp/pub?gid=0&single=true&output=csv';
     const GITHUB_IMAGE_BASE_URL = 'https://ilmorafashionbd-ux.github.io/My-Shop/images/';
 
     let allProducts = [];
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allImages = [mainImageUrl, ...otherImages];
         
         // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['M', 'L', 'XL'];
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
@@ -138,27 +138,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <div class="product-detail-info">
-                    <h2 class="product-title">
-                        ${product.product_name}
-                    </h2>
+                    <h2 class="product-title">${product.product_name}</h2>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong> 
+                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                ${product.stock_status || 'In Stock'}
+                            </span>
+                        </div>
+                    </div>
                     
                     <div class="product-price-section">
-                        <div class="price-main">BDT ${product.price}</div>
-                    </div>
-
-                    <div class="product-meta">
-                        <strong>PCODE:</strong> <span>${product.sku || 'N/A'}</span>
+                        <div class="price-main">${product.price}৳</div>
+                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                     </div>
                     
                     <div class="variant-selector">
-                        <label class="variant-label">সাইজ</label>
+                        <label class="variant-label">Weight / Variant:</label>
                         <div class="variant-options">
                             ${variantOptions}
                         </div>
                     </div>
                     
                     <div class="quantity-selector">
-                        <span class="quantity-label">পরিমাণ</span>
+                        <span class="quantity-label">Quantity:</span>
                         <div class="quantity-controls">
                             <button class="quantity-btn minus">-</button>
                             <input type="number" class="quantity-input" value="1" min="1">
@@ -166,16 +176,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     
-                    <div class="order-buttons">
-                        <button class="order-btn-updated" id="new-order-btn">অর্ডার করুন</button>
-                        <button class="add-to-cart-btn" id="add-to-cart-btn">অ্যাড টু কার্ট</button>
-                    </div>
-                    <div class="product-details-section">
-                        <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
-                        <div class="details-content">
+                    <div class="product-description">
+                        <h3 class="description-title">Product Description</h3>
+                        <div class="description-content">
                             ${product.description || 'বিবরণ পাওয়া যায়নি।'}
                         </div>
                     </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="index.html" class="order-btn" style="display: inline-block; width: auto; padding: 10px 20px;">
+                        <i class="fas fa-arrow-left"></i> সকল পণ্য দেখুন
+                    </a>
                 </div>
             </div>
         `;
@@ -213,20 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
             }
         });
-
-        // New order and add to cart buttons
-        document.querySelector('#new-order-btn').addEventListener('click', () => {
-            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            showOrderForm(product, selectedVariant, quantity);
-        });
-
-        document.querySelector('#add-to-cart-btn').addEventListener('click', () => {
-            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            const productToAdd = { ...product, variant: selectedVariant, quantity: parseInt(quantity) };
-            addToCart(productToAdd);
-        });
     };
 
     // Function to display related products
@@ -250,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allImages = [mainImageUrl, ...otherImages];
         
         // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['M', 'L', 'XL'];
+        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
         const variantOptions = variants.map(v => 
             `<div class="variant-option" data-value="${v}">${v}</div>`
         ).join('');
@@ -266,27 +264,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 <div class="product-detail-info">
-                    <h2 class="product-title">
-                        ${product.product_name}
-                    </h2>
+                    <h2 class="product-title">${product.product_name}</h2>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong> 
+                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
+                                ${product.stock_status || 'In Stock'}
+                            </span>
+                        </div>
+                    </div>
                     
                     <div class="product-price-section">
-                        <div class="price-main">BDT ${product.price}</div>
-                    </div>
-
-                    <div class="product-meta">
-                        <strong>PCODE:</strong> <span>${product.sku || 'N/A'}</span>
+                        <div class="price-main">${product.price}৳</div>
+                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
                     </div>
                     
                     <div class="variant-selector">
-                        <label class="variant-label">সাইজ</label>
+                        <label class="variant-label">Weight / Variant:</label>
                         <div class="variant-options">
                             ${variantOptions}
                         </div>
                     </div>
                     
                     <div class="quantity-selector">
-                        <span class="quantity-label">পরিমাণ</span>
+                        <span class="quantity-label">Quantity:</span>
                         <div class="quantity-controls">
                             <button class="quantity-btn minus">-</button>
                             <input type="number" class="quantity-input" value="1" min="1">
@@ -294,13 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     
-                    <div class="order-buttons">
-                        <button class="order-btn-updated" id="new-order-btn">অর্ডার করুন</button>
-                        <button class="add-to-cart-btn" id="add-to-cart-btn">অ্যাড টু কার্ট</button>
-                    </div>
-                    <div class="product-details-section">
-                        <h3 class="details-title">প্রোডাক্টের ডিটেইলস</h3>
-                        <div class="details-content">
+                    <div class="product-description">
+                        <h3 class="description-title">Product Description</h3>
+                        <div class="description-content">
                             ${product.description || 'বিবরণ পাওয়া যায়নি।'}
                         </div>
                     </div>
@@ -345,20 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // New order and add to cart buttons
-        productDetailContainer.querySelector('#new-order-btn').addEventListener('click', () => {
-            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            showOrderForm(product, selectedVariant, quantity);
-        });
-
-        productDetailContainer.querySelector('#add-to-cart-btn').addEventListener('click', () => {
-            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            const productToAdd = { ...product, variant: selectedVariant, quantity: parseInt(quantity) };
-            addToCart(productToAdd);
-        });
-
         history.pushState({ modalOpen: true }, '', '#product-' + product.id);
     };
 
@@ -376,9 +366,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cart
     const addToCart = (product) => {
-        const existing = cart.find(p => p.id === product.id && p.variant === product.variant);
-        if (existing) existing.quantity += product.quantity;
-        else cart.push(product);
+        const existing = cart.find(p => p.id === product.id);
+        if (existing) existing.quantity++;
+        else cart.push({...product, quantity:1});
         updateCartCount();
         alert(`${product.product_name} কার্টে যুক্ত হয়েছে`);
     };
