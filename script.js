@@ -234,22 +234,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantityInput.value = parseInt(quantityInput.value) - 1;
             }
         });
-        
-        // New: WhatsApp and Messenger buttons functionality for single product view
+
+        // WhatsApp order button
         document.getElementById('whatsapp-order-btn').addEventListener('click', () => {
             const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = document.querySelector('.quantity-input').value;
+            const quantity = quantityInput.value;
             showOrderForm(product, selectedVariant, quantity);
         });
 
+        // Messenger order button
         document.getElementById('messenger-order-btn').addEventListener('click', () => {
             const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = document.querySelector('.quantity-input').value;
+            const quantity = quantityInput.value;
             const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
             
+            // Open Facebook Messenger with pre-filled message
             const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
             window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
         });
+
     };
 
     // Function to display related products
