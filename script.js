@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     
-                    <div class="order-buttons center-buttons-mobile">
+                    <div class="order-buttons">
                         <button class="whatsapp-order-btn" id="whatsapp-order-btn">
                             <i class="fab fa-whatsapp"></i> WhatsApp Order
                         </button>
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     
-                    <div class="order-buttons center-buttons-mobile">
+                    <div class="order-buttons">
                         <button class="whatsapp-order-btn" id="whatsapp-order-btn">
                             <i class="fab fa-whatsapp"></i> WhatsApp Order
                         </button>
