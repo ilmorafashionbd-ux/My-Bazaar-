@@ -592,6 +592,11 @@ body.modal-open {
 
 /* Premium Plus Style Product Detail */
 .product-detail-premium {
+    /* Updated styles for centering */
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    /* Existing styles */
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
@@ -846,8 +851,7 @@ body.modal-open {
 @media (max-width: 768px) {
     .product-detail-premium {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        align-items: center; /* Center-align the content vertically in the column */
     }
 
     .product-detail-info {
