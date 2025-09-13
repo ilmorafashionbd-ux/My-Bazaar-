@@ -35,148 +35,113 @@
             <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Website Banner">
         </section>
 
-        <section id="category" class="category">
+        <section class="categories">
             <div class="container">
-                <h2 class="section-title">ক্যাটাগরি</h2>
+                <h2 class="section-title">পণ্যের ক্যাটাগরি</h2>
                 <div class="category-grid">
-                    <a href="#" class="category-item" data-category="all">
-                        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/all.jpg" alt="All Products">
+                    <div class="category-item" data-category="all">
+                        <i class="fas fa-globe"></i>
                         <span>সকল পণ্য</span>
-                    </a>
-                    <a href="#" class="category-item" data-category="three-piece">
-                        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/three-piece.jpg" alt="Three Piece">
-                        <span>থ্রি পিস</span>
-                    </a>
-                    <a href="#" class="category-item" data-category="tops">
-                        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/tops.jpg" alt="Tops">
-                        <span>টপস</span>
-                    </a>
-                    <a href="#" class="category-item" data-category="sharee">
-                        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/sharee.jpg" alt="Sharee">
-                        <span>শাড়ী</span>
-                    </a>
+                    </div>
+                    <div class="category-item" data-category="electronics">
+                        <i class="fas fa-laptop"></i>
+                        <span>ইলেকট্রনিক্স</span>
+                    </div>
+                    <div class="category-item" data-category="mens-fashion">
+                        <i class="fas fa-male"></i>
+                        <span>পুরুষদের ফ্যাশন</span>
+                    </div>
+                    <div class="category-item" data-category="womens-fashion">
+                        <i class="fas fa-female"></i>
+                        <span>মহিলাদের ফ্যাশন</span>
+                    </div>
+                     <div class="category-item" data-category="books">
+                        <i class="fas fa-book-open"></i>
+                        <span>বই ও স্টেশনারি</span>
+                    </div>
+                    <div class="category-item" data-category="home-living">
+                        <i class="fas fa-couch"></i>
+                        <span>ঘর ও সজ্জা</span>
+                    </div>
+                    <div class="category-item" data-category="wearables">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>স্মার্ট গ্যাজেট</span>
+                    </div>
+                    <div class="category-item" data-category="kids-baby">
+                        <i class="fas fa-baby"></i>
+                        <span>শিশু পণ্য</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="products" class="product-detail">
-            <div class="container product-detail-top">
-                <div class="product-images">
-                    <div class="main-image-container">
-                        <img id="main-product-image" src="" alt="Product Main Image">
-                    </div>
-                    <div class="thumbnail-strip-container">
-                        <div id="thumbnail-strip" class="thumbnail-strip">
-                            </div>
-                    </div>
-                </div>
-
-                <div class="product-info-block">
-                    <h1 id="product-title" class="product-title"></h1>
-                    <div class="price-container">
-                        <span id="discount-price" class="discount-price"></span>
-                        <span id="original-price" class="original-price"></span>
-                    </div>
-                    <p id="product-code" class="product-code"></p>
-
-                    <div class="product-options">
-                        <div class="option-group">
-                            <p class="option-label">সাইজ:</p>
-                            <div id="size-options" class="size-options">
-                                </div>
-                        </div>
-                        
-                        <div class="option-group">
-                            <p class="option-label">পরিমাণ:</p>
-                            <div class="quantity-selector">
-                                <button class="qty-btn minus-btn">-</button>
-                                <input type="number" id="quantity-input" class="qty-input" value="1" min="1" readonly>
-                                <button class="qty-btn plus-btn">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <a id="whatsapp-order-btn" class="action-btn whatsapp-order-btn" target="_blank">
-                            <i class="fab fa-whatsapp"></i> অর্ডার করুন (WhatsApp)
-                        </a>
-                        <a id="messenger-order-btn" class="action-btn messenger-order-btn" target="_blank">
-                            <i class="fab fa-facebook-messenger"></i> মেসেজ করুন (Messenger)
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <section id="products" class="products">
             <div class="container">
-                <div class="product-description">
-                    <h3 class="description-title">পণ্যের বিবরণ</h3>
-                    <div id="product-description-content" class="description-content"></div>
-                </div>
-                <div class="related-products">
-                    <h3 class="description-title">সংশ্লিষ্ট পণ্য</h3>
-                    <div id="related-products-grid" class="product-grid"></div>
-                </div>
+                <h2 class="section-title">আমাদের সকল প্রোডাক্ট</h2>
+                <div id="product-grid" class="product-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section class="related-products" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">সংশ্লিষ্ট পণ্যসমূহ</h2>
+                <div id="related-products-grid" class="product-grid">
+                    </div>
             </div>
         </section>
 
         <div id="product-detail-modal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content product-detail-content">
                 <span class="close-btn" id="product-modal-close">&times;</span>
-                <div id="modal-product-content">
+                <div id="product-detail-container">
                     </div>
             </div>
         </div>
 
         <div id="order-modal" class="modal">
             <div class="modal-content">
-                <span class="close-btn" id="order-modal-close">&times;</span>
-                <h2>অর্ডার ফরম</h2>
+                <span class="close-btn order-close-btn" id="order-modal-close">&times;</span>
+                <h2 class="form-title">অর্ডার কনফার্ম করুন</h2>
                 <form id="order-form">
                     <input type="hidden" id="product-name-input">
                     <input type="hidden" id="product-id-input">
-                    
                     <div class="form-group">
                         <label for="customer-name">আপনার নাম</label>
-                        <input type="text" id="customer-name" name="customer-name" required>
+                        <input type="text" id="customer-name" placeholder="আপনার নাম লিখুন" required>
                     </div>
                     <div class="form-group">
-                        <label for="customer-address">আপনার ঠিকানা</label>
-                        <textarea id="customer-address" name="customer-address" rows="3" required></textarea>
+                        <label for="customer-address">সম্পূর্ণ ঠিকানা</label>
+                        <input type="text" id="customer-address" placeholder="আপনার সম্পূর্ণ ঠিকানা দিন" required>
                     </div>
                     <div class="form-group">
-                        <label for="customer-mobile">মোবাইল নাম্বার</label>
-                        <input type="tel" id="customer-mobile" name="customer-mobile" required>
+                        <label for="customer-mobile">মোবাইল নম্বর</label>
+                        <input type="tel" id="customer-mobile" placeholder="আপনার মোবাইল নম্বর দিন" required>
                     </div>
-                    <button type="submit" class="whatsapp-btn">অর্ডার করুন (WhatsApp)</button>
+                    <button type="submit" class="submit-btn">হোয়াটসঅ্যাপে অর্ডার করুন</button>
                 </form>
             </div>
         </div>
+
     </main>
 
     <footer id="footer" class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>যোগাযোগ</h4>
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i> ঢাকা, বাংলাদেশ
-                    </p>
-                    <p>
-                        <i class="fas fa-envelope"></i> ilmorafashionbd@gmail.com
-                    </p>
-                    <p>
-                        <i class="fab fa-whatsapp"></i> +880 1778 095805
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>আমাদের সম্পর্কে</h4>
-                    <p>Ilmora Fashion BD আপনার জন্য নিয়ে আসে সেরা ডিজাইনের মানসম্মত সব পোশাক, সাশ্রয়ী মূল্যে।</p>
-                </div>
-                <div class="footer-col">
                     <h4>গুরুত্বপূর্ণ লিংক</h4>
                     <ul>
-                        <li><a href="#home">হোম</a></li>
-                        <li><a href="#products">শপ</a></li>
-                        <li><a href="#">আমাদের সেবা</a></li>
+                        <li><a href="#home"><i class="fas fa-link"></i> হোম পেজ</a></li>
+                        <li><a href="#products"><i class="fas fa-link"></i> শপ পেজ</a></li>
+                        <li><a href="#footer"><i class="fas fa-link"></i> যোগাযোগ পেজ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>আমাদের সাথে যোগাযোগ করুন</h4>
+                    <ul>
+                        <li><i class="fab fa-whatsapp"></i> 01778095805</li>
+                        <li><i class="fas fa-envelope"></i> ilmorafashionbd@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> ঢাকা, বাংলাদেশ</li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -216,6 +181,7 @@
         </a>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
