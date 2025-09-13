@@ -26,416 +26,119 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartCountTop = document.querySelector('.cart-count');
     const cartCountBottom = document.querySelector('.cart-count-bottom');
     const categoryItems = document.querySelectorAll('.category-item');
-    const relatedProductsSection = document.querySelector('.related-products');
-    const relatedProductsGrid = document.getElementById('related-products-grid');
 
-    // Check if URL has product ID parameter for single product view
-    const urlParams = new URLSearchParams(window.location.search);
-    const productIdFromUrl = urlParams.get('product');
-    const isSingleProductView = productIdFromUrl !== null;
-
-    // Fetch products from Google Sheet
-    const fetchProducts = async () => {
+    // Function to parse CSV
+    async function fetchAndParseCSV() {
         try {
             const response = await fetch(csvUrl);
-            const text = await response.text();
-            Papa.parse(text, {
-                header: true,
-                dynamicTyping: true,
-                complete: (results) => {
-                    allProducts = results.data.filter(product => product.id);
-                    
-                    if (isSingleProductView) {
-                        // Show single product view if product ID is in URL
-                        const product = allProducts.find(p => p.id == productIdFromUrl);
-                        if (product) {
-                            showSingleProductView(product);
-                            // After showing single product, display related products
-                            displayRelatedProducts(product);
-                        } else {
-                            document.body.innerHTML = '<div class="container"><p>পণ্যটি পাওয়া যায়নি। <a href="index.html">হোমপেজে ফিরে যান</a></p></div>';
-                        }
-                    } else if (allProducts.length > 0) {
-                        displayProducts(allProducts);
-                    } else {
-                        productGrid.innerHTML = '<p>কোনো প্রোডাক্ট পাওয়া যায়নি।</p>';
-                    }
+            const data = await response.text();
+            allProducts = parseCSV(data);
+            displayProducts(allProducts);
+        } catch (error) {
+            console.error('Error fetching CSV:', error);
+        }
+    }
+
+    function parseCSV(csv) {
+        const lines = csv.split('\n').map(line => line.trim()).filter(line => line);
+        if (lines.length === 0) return [];
+        const headers = lines[0].split(',').map(header => header.trim().toLowerCase());
+        const products = [];
+        for (let i = 1; i < lines.length; i++) {
+            const values = lines[i].split(',').map(value => value.trim());
+            const product = {};
+            headers.forEach((header, index) => {
+                let value = values[index] || '';
+                // Clean up string values by removing quotes if present
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.substring(1, value.length - 1);
+                }
+                if (header === 'price' || header === 'original_price') {
+                    product[header] = parseFloat(value) || 0;
+                } else if (header === 'images') {
+                    product[header] = value;
+                } else {
+                    product[header] = value;
                 }
             });
-        } catch (error) {
-            console.error('Failed to fetch products:', error);
+            products.push(product);
         }
-    };
+        return products;
+    }
 
-    // Display products on homepage
-    const displayProducts = (productsToDisplay, targetGrid = productGrid) => {
-        targetGrid.innerHTML = '';
-        if (productsToDisplay.length === 0) {
-            targetGrid.innerHTML = '<p>এই ক্যাটাগরিতে কোনো পণ্য নেই।</p>';
-            return;
-        }
-
-        productsToDisplay.forEach(product => {
-            if (!product.id || !product.product_name || !product.price || !product.image_url) return;
-
-            const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
-            const isOutOfStock = product.stock_status && product.stock_status.toLowerCase() === 'out of stock';
-
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-            productCard.dataset.productId = product.id;
-
-            productCard.innerHTML = `
-                <div class="product-image">
-                    <img src="${mainImageUrl}" alt="${product.product_name}" 
-                        onerror="this.onerror=null;this.src='https://placehold.co/400x400?text=No+Image';">
-                    ${isOutOfStock ? `<span class="stock-status">Out of stock</span>` : ''}
+    // Function to display products
+    function displayProducts(products) {
+        if (!productGrid) return;
+        productGrid.innerHTML = '';
+        products.forEach(product => {
+            const productItem = document.createElement('div');
+            productItem.className = 'product-item';
+            productItem.dataset.sku = product.sku;
+            productItem.innerHTML = `
+                <div class="product-item-img-container">
+                    <img src="${GITHUB_IMAGE_BASE_URL}${product.images.split(',')[0].trim()}" alt="${product.title}">
                 </div>
-                <div class="product-info">
-                    <h3 class="product-name">${product.product_name}</h3>
-                    <div class="product-price">${product.price}৳</div>
+                <div class="product-item-info">
+                    <h3 class="product-item-title">${product.title}</h3>
+                    <p class="product-item-price">${product.price}৳</p>
+                    <button class="product-item-btn">বিস্তারিত দেখুন</button>
                 </div>
             `;
-            targetGrid.appendChild(productCard);
+            productGrid.appendChild(productItem);
+        });
 
-            productCard.addEventListener('click', () => {
-                // Redirect to single product view
-                window.location.href = `index.html?product=${product.id}`;
+        document.querySelectorAll('.product-item-btn').forEach(button => {
+            button.addEventListener('click', e => {
+                e.preventDefault();
+                const sku = e.target.closest('.product-item').dataset.sku;
+                const product = allProducts.find(p => p.sku === sku);
+                if (product) {
+                    showProductDetail(product);
+                }
             });
         });
-    };
+    }
 
-    // Show single product view when product ID is in URL
-    const showSingleProductView = (product) => {
-        // Hide elements that are not needed in single product view
-        document.querySelector('.banner').style.display = 'none';
-        document.querySelector('.categories').style.display = 'none';
-        document.querySelector('.section-title').style.display = 'none';
-        document.querySelector('.footer').style.marginBottom = '0';
+    // Function to show product detail modal
+    function showProductDetail(product) {
+        if (!product || !document.getElementById('product-detail-container')) return;
+
+        // Set up the new product detail page
+        setupProductDetailPage(product);
         
-        // Change page title
-        document.title = `${product.product_name} - Ilmora Fashion BD`;
+        // Hide the main product grid section and show the product detail section
+        document.getElementById('products').style.display = 'block';
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
         
-        const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
-        const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
-        const allImages = [mainImageUrl, ...otherImages];
-        
-        // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
-        const variantOptions = variants.map(v => 
-            `<div class="variant-option" data-value="${v}">${v}</div>`
-        ).join('');
-        
-        // Replace product grid with single product view
-        productGrid.innerHTML = `
-            <div class="product-detail-premium">
-                <div class="product-detail-images">
-                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
-                    ${allImages.length > 1 ? `
-                        <div class="thumbnail-images">
-                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
-                        </div>` : ''}
-                </div>
-                
-                <div class="product-detail-info">
-                    <h2 class="product-title">${product.product_name}</h2>
-                    
-                    <div class="product-meta">
-                        <div class="meta-item">
-                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Status:</strong> 
-                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
-                                ${product.stock_status || 'In Stock'}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="product-price-section">
-                        <div class="price-main">${product.price}৳</div>
-                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
-                    </div>
-                    
-                    <div class="variant-selector">
-                        <label class="variant-label">Weight / Variant:</label>
-                        <div class="variant-options">
-                            ${variantOptions}
-                        </div>
-                    </div>
-                    
-                    <div class="quantity-selector">
-                        <span class="quantity-label">Quantity:</span>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="order-buttons">
-                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Order
-                        </button>
-                        <button class="messenger-order-btn" id="messenger-order-btn">
-                            <i class="fab fa-facebook-messenger"></i> Messenger Order
-                        </button>
-                    </div>
-                    
-                    <div class="product-description">
-                        <h3 class="description-title">Product Description</h3>
-                        <div class="description-content">
-                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <a href="index.html" class="order-btn" style="display: inline-block; width: auto; padding: 10px 20px;">
-                        <i class="fas fa-arrow-left"></i> সকল পণ্য দেখুন
-                    </a>
-                </div>
-            </div>
-        `;
-        
-        // Thumbnails functionality
-        document.querySelectorAll('.thumbnail').forEach(thumb => {
-            thumb.addEventListener('click', e => {
-                document.getElementById('main-product-image').src = e.target.dataset.imgUrl;
-                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-            });
-        });
+        // You might need to hide other sections if this is a single page application
+        // For example:
+        // document.getElementById('home').style.display = 'none';
+        // document.getElementById('category').style.display = 'none';
+    }
 
-        // Variant selection
-        const variantOptionsEl = document.querySelectorAll('.variant-option');
-        if (variantOptionsEl.length > 0) {
-            variantOptionsEl[0].classList.add('selected');
-            
-            variantOptionsEl.forEach(option => {
-                option.addEventListener('click', () => {
-                    variantOptionsEl.forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                });
-            });
-        }
-
-        // Quantity controls
-        const quantityInput = document.querySelector('.quantity-input');
-        document.querySelector('.quantity-btn.plus').addEventListener('click', () => {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-        });
-        
-        document.querySelector('.quantity-btn.minus').addEventListener('click', () => {
-            if (parseInt(quantityInput.value) > 1) {
-                quantityInput.value = parseInt(quantityInput.value) - 1;
-            }
-        });
-
-        // WhatsApp order button
-        document.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
-            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            showOrderForm(product, selectedVariant, quantity);
-        });
-
-        // Messenger order button
-        document.querySelector('#messenger-order-btn').addEventListener('click', () => {
-            const selectedVariant = document.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
-            
-            // Open Facebook Messenger with pre-filled message
-            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
-            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
-        });
-    };
-
-    // Function to display related products
-    const displayRelatedProducts = (currentProduct) => {
-        const related = allProducts.filter(p => 
-            p.category === currentProduct.category && p.id !== currentProduct.id
-        );
-
-        if (related.length > 0) {
-            relatedProductsSection.style.display = 'block';
-            displayProducts(related, relatedProductsGrid);
+    // Add to cart functionality
+    function addToCart(product) {
+        const existingItem = cart.find(item => item.sku === product.sku);
+        if (existingItem) {
+            existingItem.quantity++;
         } else {
-            relatedProductsSection.style.display = 'none';
-        }
-    };
-
-    // Show product detail in modal (for homepage)
-    const showProductDetailModal = (product) => {
-        const mainImageUrl = GITHUB_IMAGE_BASE_URL + product.image_url;
-        const otherImages = product.other_images ? product.other_images.split(',').map(img => GITHUB_IMAGE_BASE_URL + img.trim()) : [];
-        const allImages = [mainImageUrl, ...otherImages];
-        
-        // Generate variant options if available
-        const variants = product.variants ? product.variants.split(',').map(v => v.trim()) : ['500g', '1kg'];
-        const variantOptions = variants.map(v => 
-            `<div class="variant-option" data-value="${v}">${v}</div>`
-        ).join('');
-
-        productDetailContainer.innerHTML = `
-            <div class="product-detail-premium">
-                <div class="product-detail-images">
-                    <img id="main-product-image" class="main-image" src="${allImages[0]}" alt="${product.product_name}">
-                    ${allImages.length > 1 ? `
-                        <div class="thumbnail-images">
-                            ${allImages.map((img, i) => `<img class="thumbnail ${i===0?'active':''}" src="${img}" data-img-url="${img}">`).join('')}
-                        </div>` : ''}
-                </div>
-                
-                <div class="product-detail-info">
-                    <h2 class="product-title">${product.product_name}</h2>
-                    
-                    <div class="product-meta">
-                        <div class="meta-item">
-                            <strong>SKU:</strong> <span>${product.sku || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Category:</strong> <span>${product.category || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Status:</strong> 
-                            <span class="${product.stock_status === 'In Stock' ? 'in-stock' : 'out-of-stock'}">
-                                ${product.stock_status || 'In Stock'}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="product-price-section">
-                        <div class="price-main">${product.price}৳</div>
-                        ${product.price_range ? `<div class="price-range">${product.price_range}</div>` : ''}
-                    </div>
-                    
-                    <div class="variant-selector">
-                        <label class="variant-label">Weight / Variant:</label>
-                        <div class="variant-options">
-                            ${variantOptions}
-                        </div>
-                    </div>
-                    
-                    <div class="quantity-selector">
-                        <span class="quantity-label">Quantity:</span>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn minus">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="order-buttons">
-                        <button class="whatsapp-order-btn" id="whatsapp-order-btn">
-                            <i class="fab fa-whatsapp"></i> WhatsApp Order
-                        </button>
-                        <button class="messenger-order-btn" id="messenger-order-btn">
-                            <i class="fab fa-facebook-messenger"></i> Messenger Order
-                        </button>
-                    </div>
-                    
-                    <div class="product-description">
-                        <h3 class="description-title">Product Description</h3>
-                        <div class="description-content">
-                            ${product.description || 'বিবরণ পাওয়া যায়নি।'}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        productDetailModal.style.display = 'block';
-        document.body.classList.add('modal-open');
-
-        // Thumbnails functionality
-        productDetailContainer.querySelectorAll('.thumbnail').forEach(thumb => {
-            thumb.addEventListener('click', e => {
-                document.getElementById('main-product-image').src = e.target.dataset.imgUrl;
-                productDetailContainer.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-            });
-        });
-
-        // Variant selection
-        const variantOptionsEl = productDetailContainer.querySelectorAll('.variant-option');
-        if (variantOptionsEl.length > 0) {
-            variantOptionsEl[0].classList.add('selected');
-            
-            variantOptionsEl.forEach(option => {
-                option.addEventListener('click', () => {
-                    variantOptionsEl.forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                });
+            cart.push({ ...product,
+                quantity: 1
             });
         }
-
-        // Quantity controls
-        const quantityInput = productDetailContainer.querySelector('.quantity-input');
-        productDetailContainer.querySelector('.quantity-btn.plus').addEventListener('click', () => {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-        });
-        
-        productDetailContainer.querySelector('.quantity-btn.minus').addEventListener('click', () => {
-            if (parseInt(quantityInput.value) > 1) {
-                quantityInput.value = parseInt(quantityInput.value) - 1;
-            }
-        });
-
-        // WhatsApp order button
-        productDetailContainer.querySelector('#whatsapp-order-btn').addEventListener('click', () => {
-            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            showOrderForm(product, selectedVariant, quantity);
-        });
-
-        // Messenger order button
-        productDetailContainer.querySelector('#messenger-order-btn').addEventListener('click', () => {
-            const selectedVariant = productDetailContainer.querySelector('.variant-option.selected')?.dataset.value || '';
-            const quantity = quantityInput.value;
-            const productNameWithVariant = `${product.product_name} ${selectedVariant}`;
-            
-            // Open Facebook Messenger with pre-filled message
-            const msg = `I want to order: ${productNameWithVariant} (Quantity: ${quantity})`;
-            window.open(`https://m.me/61578353266944?text=${encodeURIComponent(msg)}`, '_blank');
-        });
-        history.pushState({ modalOpen: true }, '', '#product-' + product.id);
-    };
-
-    // Close product modal
-    const closeProductDetailModal = () => {
-        productDetailModal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-    };
-
-    productModalCloseBtn.addEventListener('click', closeProductDetailModal);
-
-    window.addEventListener('popstate', e => {
-        if (!(e.state && e.state.modalOpen)) closeProductDetailModal();
-    });
-
-    // Cart
-    const addToCart = (product) => {
-        const existing = cart.find(p => p.id === product.id);
-        if (existing) existing.quantity++;
-        else cart.push({...product, quantity:1});
         updateCartCount();
-        alert(`${product.product_name} কার্টে যুক্ত হয়েছে`);
-    };
+    }
 
-    const updateCartCount = () => {
-        const total = cart.reduce((s, i) => s + i.quantity, 0);
-        cartCountTop.textContent = total;
-        cartCountBottom.textContent = total;
-    };
+    // Update cart count display
+    function updateCartCount() {
+        const count = cart.reduce((total, item) => total + item.quantity, 0);
+        cartCountTop.textContent = count;
+        cartCountBottom.textContent = count;
+    }
 
-    // Order form
-    const showOrderForm = (product, variant = '', quantity = 1) => {
-        const productNameWithVariant = `${product.product_name} ${variant}`.trim();
-        document.getElementById('product-name-input').value = productNameWithVariant;
+    // Show order modal
+    const showOrderModal = (product) => {
+        document.getElementById('product-name-input').value = product.title;
         document.getElementById('product-id-input').value = product.id;
         orderModal.style.display = 'block';
         document.body.classList.add('modal-open');
@@ -463,11 +166,136 @@ document.addEventListener('DOMContentLoaded', () => {
     categoryItems.forEach(item => {
         item.addEventListener('click', () => {
             const cat = item.dataset.category;
-            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.toLowerCase().replace(/\s/g,'-') === cat);
+            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.toLowerCase().replace(/\s/g, '-') === cat);
             displayProducts(filtered);
         });
     });
 
-    // Init
-    fetchProducts();
+    // Initial data fetch
+    fetchAndParseCSV();
+
+    /* ========================================================= */
+    /* New Functions for Product Detail Page (to be added) */
+    /* ========================================================= */
+
+    // New function to handle the entire product detail page logic
+    const setupProductDetailPage = (product) => {
+        // Selectors
+        const mainImage = document.getElementById('main-product-image');
+        const thumbnailStrip = document.getElementById('thumbnail-strip');
+        const productTitle = document.getElementById('product-title');
+        const discountPrice = document.getElementById('discount-price');
+        const originalPrice = document.getElementById('original-price');
+        const productCode = document.getElementById('product-code');
+        const sizeOptionsContainer = document.getElementById('size-options');
+        const quantityInput = document.getElementById('quantity-input');
+        const plusBtn = document.querySelector('.plus-btn');
+        const minusBtn = document.querySelector('.minus-btn');
+        const whatsappBtn = document.getElementById('whatsapp-order-btn');
+        const messengerBtn = document.getElementById('messenger-order-btn');
+        const productDescContent = document.getElementById('product-description-content');
+    
+        // Display product details
+        productTitle.textContent = product.title || 'Product Title';
+        productCode.textContent = `PCode: ${product.sku || 'N/A'}`;
+        productDescContent.innerHTML = product.description || '';
+    
+        // Handle price display
+        if (product.original_price && product.original_price > product.price) {
+            discountPrice.textContent = `${product.price}৳`;
+            originalPrice.textContent = `${product.original_price}৳`;
+            originalPrice.style.display = 'inline'; // Make sure it's visible
+        } else {
+            discountPrice.textContent = `${product.price}৳`;
+            originalPrice.style.display = 'none';
+        }
+    
+        // Image Gallery
+        const images = product.images.split(',').map(img => img.trim());
+        let currentImageIndex = 0;
+    
+        const updateMainImage = (index) => {
+            mainImage.src = GITHUB_IMAGE_BASE_URL + images[index];
+            const thumbnails = thumbnailStrip.querySelectorAll('img');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+            currentImageIndex = index;
+        };
+    
+        const buildThumbnails = () => {
+            thumbnailStrip.innerHTML = '';
+            images.forEach((img, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = GITHUB_IMAGE_BASE_URL + img;
+                thumb.alt = `Thumbnail ${index + 1}`;
+                thumb.addEventListener('click', () => updateMainImage(index));
+                thumbnailStrip.appendChild(thumb);
+            });
+            updateMainImage(0);
+        };
+        
+        // Swipe functionality for mobile
+        let touchStartX = 0;
+        mainImage.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        mainImage.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const deltaX = touchEndX - touchStartX;
+            if (deltaX > 50) { // Swiped right
+                currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
+            } else if (deltaX < -50) { // Swiped left
+                currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
+            }
+            updateMainImage(currentImageIndex);
+        });
+    
+        // Size Selection
+        let selectedSize = '';
+        const sizes = product.sizes ? product.sizes.split(',').map(s => s.trim()) : [];
+        if (sizes.length > 0) {
+            sizeOptionsContainer.innerHTML = ''; // Clear previous sizes
+            sizes.forEach(size => {
+                const sizeBtn = document.createElement('button');
+                sizeBtn.className = 'size-option-btn';
+                sizeBtn.textContent = size;
+                sizeBtn.dataset.size = size;
+                sizeBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.size-option-btn').forEach(btn => btn.classList.remove('active'));
+                    sizeBtn.classList.add('active');
+                    selectedSize = size;
+                });
+                sizeOptionsContainer.appendChild(sizeBtn);
+            });
+            document.querySelector('.product-options .option-group').style.display = 'block';
+        } else {
+            document.querySelector('.product-options .option-group').style.display = 'none';
+        }
+        
+        // Quantity Selector
+        plusBtn.addEventListener('click', () => {
+            let currentQty = parseInt(quantityInput.value);
+            quantityInput.value = currentQty + 1;
+        });
+    
+        minusBtn.addEventListener('click', () => {
+            let currentQty = parseInt(quantityInput.value);
+            if (currentQty > 1) {
+                quantityInput.value = currentQty - 1;
+            }
+        });
+    
+        // WhatsApp Order Button
+        whatsappBtn.addEventListener('click', () => {
+            const orderMessage = `🛒 নতুন অর্ডার!\n\nপণ্যের নাম: ${productTitle.textContent}\nID: ${productCode.textContent}\nসাইজ: ${selectedSize || 'N/A'}\nপরিমাণ: ${quantityInput.value}\n\nআপনার ঠিকানা ও মোবাইল নম্বর দিন।`;
+            window.open(`https://wa.me/8801778095805?text=${encodeURIComponent(orderMessage)}`, '_blank');
+        });
+    
+        // Messenger Order Button
+        messengerBtn.href = 'https://www.facebook.com/messages/t/61578353266944';
+    
+        // Initial build
+        buildThumbnails();
+    };
 });
