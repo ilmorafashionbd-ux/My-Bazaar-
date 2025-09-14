@@ -396,17 +396,11 @@ body.modal-open {
 }
 
 .product-images .thumbnail-images {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
     gap: 10px;
-    overflow-x: auto;
     width: 100%;
     padding: 5px 0;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.product-images .thumbnail-images::-webkit-scrollbar {
-    display: none;
 }
 
 .product-images .thumbnail {
