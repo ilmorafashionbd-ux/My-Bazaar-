@@ -110,7 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide elements that are not needed in single product view
         document.querySelector('.banner').style.display = 'none';
         document.querySelector('.categories').style.display = 'none';
-        document.querySelector('.section-title').style.display = 'none';
+        // Check for the new class to hide only the specific title
+        const homePageTitle = document.querySelector('.section-title.homepage-title');
+        if (homePageTitle) {
+            homePageTitle.style.display = 'none';
+        }
         document.querySelector('.footer').style.marginBottom = '0';
         
         // Change page title
