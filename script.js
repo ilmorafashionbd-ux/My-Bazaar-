@@ -440,6 +440,20 @@ document.addEventListener('DOMContentLoaded', () => {
         history.pushState({ modalOpen: true }, '', '#product-' + product.id);
     };
 
+    // Function to display related products
+    const displayRelatedProducts = (currentProduct) => {
+        const related = allProducts.filter(p => 
+            p.category === currentProduct.category && p.id !== currentProduct.id
+        );
+
+        if (related.length > 0) {
+            relatedProductsSection.style.display = 'block';
+            displayProducts(related, relatedProductsGrid);
+        } else {
+            relatedProductsSection.style.display = 'none';
+        }
+    };
+
     // Close product modal
     const closeProductDetailModal = () => {
         productDetailModal.style.display = 'none';
