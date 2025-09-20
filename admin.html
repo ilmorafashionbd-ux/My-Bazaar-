@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - My Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Firebase compat libs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="admin">
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="index.html">
+        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/logo.png" alt="Logo" />
+        <span>Admin Panel</span>
+      </a>
+      <div class="actions">
+        <button id="btn-signout" class="btn small" style="display:none">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap main">
+    <section class="section" id="admin-login-section">
+      <h2 class="section-title">অ্যাডমিন লগইন</h2>
+      <form id="login-form" class="card">
+        <label>ইমেইল</label>
+        <input id="login-email" type="email" placeholder="admin@example.com" required>
+        <label>পাসওয়ার্ড</label>
+        <input id="login-password" type="password" placeholder="password" required>
+        <div style="margin-top:10px;">
+          <button type="submit" class="btn">লগইন</button>
+        </div>
+      </form>
+
+      <!-- 🔹 Register form (added) -->
+      <div id="register-wrapper" style="margin-top:12px;">
+        <button id="show-register-btn" class="btn alt" type="button">এডমিন রেজিস্টার করুন</button>
+
+        <form id="register-form" class="card" style="display:none; margin-top:10px;">
+          <label>রেজিস্টার ইমেইল</label>
+          <input id="reg-email" type="email" placeholder="admin@example.com" required>
+          <label>পাসওয়ার্ড</label>
+          <input id="reg-password" type="password" placeholder="password" required>
+          <label>সিক্রেট কোড (যদি থাকে)</label>
+          <input id="reg-secret" type="text" placeholder="Secret code">
+          <div style="margin-top:10px;">
+            <button type="submit" class="btn">রেজিস্টার</button>
+            <button id="cancel-register-btn" type="button" class="btn alt">বাতিল</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="admin-panel-section" style="display:none;">
+      <h2 class="section-title">প্রোডাক্ট ম্যানেজ</h2>
+
+      <div class="card">
+        <h3>নতুন প্রোডাক্ট যোগ করুন</h3>
+        <form id="product-form">
+          <label>প্রোডাক্ট নাম</label>
+          <input id="p-name" required>
+          <label>মূল্য (৳)</label>
+          <input id="p-price" type="number" min="0" required>
+          <label>SKU (PCODE)</label>
+          <input id="p-sku">
+          <label>ক্যাটেগরি</label>
+          <input id="p-category">
+          <label>বর্ণনা</label>
+          <textarea id="p-desc" rows="3"></textarea>
+          <label>ছবি (JPEG/PNG)</label>
+          <input id="p-image" type="file" accept="image/*">
+          <div style="margin-top:10px;">
+            <button type="submit" class="btn">Upload & Save</button>
+            <button id="btn-clear-form" type="button" class="btn alt">Clear</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>আপলোডকৃত প্রোডাক্টসমূহ</h3>
+        <div id="admin-products-list">লকড অন।</div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div>© Ilmora Fashion - Admin</div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
