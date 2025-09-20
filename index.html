@@ -15,25 +15,37 @@
 </head>
 <body data-page="index">
 
+  <!-- TOP NAV / HEADER (same for home & product pages) -->
   <header class="topbar">
-    <div class="wrap">
+    <div class="wrap header-inner">
       <a class="logo" href="index.html">
         <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/logo.png" alt="Logo" />
         <span>Ilmora Fashion</span>
       </a>
+
+      <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">হোম</a>
+        <a href="index.html#products" class="nav-link">শপ</a>
+        <a href="#footer" class="nav-link">যোগাযোগ</a>
+      </nav>
+
       <div class="actions">
         <a class="btn small" href="admin.html" title="Admin (Login)">অ্যাডমিন</a>
         <button id="cart-open-btn" class="btn small"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></button>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="wrap main">
+  <!-- MAIN CONTENT: home or product detail rendered here -->
+  <main class="wrap main" id="main-content">
     <section class="hero">
-      <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Hero banner">
+      <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/hero.jpg" alt="Hero banner">
     </section>
 
-    <section class="section">
+    <section class="section" id="products-section">
       <h2 class="section-title">পণ্য সমূহ</h2>
       <div id="product-grid" class="product-grid">
         <!-- products rendered here -->
@@ -42,26 +54,33 @@
     </section>
   </main>
 
-  <!-- Product modal -->
-  <div id="product-modal" class="modal">
+  <!-- PRODUCT MODAL (for quick preview) -->
+  <div id="product-modal" class="modal" aria-hidden="true">
     <div class="modal-card">
-      <button class="modal-close" id="product-modal-close">&times;</button>
+      <button class="modal-close" id="product-modal-close" aria-label="Close modal">&times;</button>
       <div id="product-modal-inner"></div>
     </div>
   </div>
 
-  <!-- Cart modal -->
-  <div id="cart-modal" class="modal">
+  <!-- CART MODAL -->
+  <div id="cart-modal" class="modal" aria-hidden="true">
     <div class="modal-card">
-      <button class="modal-close" id="cart-modal-close">&times;</button>
+      <button class="modal-close" id="cart-modal-close" aria-label="Close cart">&times;</button>
       <div id="cart-inner"></div>
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="wrap">
-      <div>© Ilmora Fashion</div>
-      <div>মোবাইল: 01778095805</div>
+  <!-- FOOTER (same as home/footer license area) -->
+  <footer id="footer" class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-left">
+        <h4>Ilmora Fashion</h4>
+        <p>আপনি যা দেখছেন তা ডেমো সাইট; ব্যবসার জন্য ব্যবহার করার আগে কনফিগারেশন চেক করুন।</p>
+      </div>
+      <div class="footer-right">
+        <p>© <span id="copy-year"></span> Ilmora Fashion. সর্বস্বত্ব সংরক্ষিত.</p>
+        <p class="small">লাইসেন্স: This is a demo template. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
