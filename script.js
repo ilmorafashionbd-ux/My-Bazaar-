@@ -444,4 +444,51 @@ async function initAdminPage(){
       });
 
       // attach submit handler supporting edit
-      try{ productForm.removeEventListener('submit', productForm.__submitHandler);
+      try{ productForm.removeEventListener('submit', productForm.__submitHandler); }catch(e){}
+      const submitHandler = async function(e){
+        e.preventDefault();
+        const editId = productForm.dataset.editId;
+        const name = $('#p-name').value.trim();
+        const price = $('#p-price').value.trim();
+        const sku = $('#p-sku').value.trim();
+        const category = $('#p-category').value.trim();
+        const desc = $('#p-desc').value.trim();
+        const fileEl = $('#p-image');
+        let imageUrl = '';
+        if(fileEl && fileEl.files && fileEl.files[0]){ try{ imageUrl = await uploadToCloudinary(fileEl.files[0]); }catch(err){ alert('Upload failed'); return; } }
+        try{
+          if(editId){
+            const toUpdate = { product_name: name, price, sku, category, description: desc };
+            if(imageUrl) toUpdate.imageUrl = imageUrl;
+            await db.collection('products').doc(editId).update(toUpdate);
+            alert('Updated'); delete productForm.dataset.editId;
+          } else {
+            if(!imageUrl) imageUrl = 'https://via.placeholder.com/600x400?text=No+Image';
+            await db.collection('products').add({ product_name: name, price, sku, category, description: desc, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            alert('Saved');
+          }
+          productForm.reset(); loadAdminProducts();
+        }catch(err){ console.error(err); alert('Save error: '+err.message); }
+      };
+      productForm.addEventListener('submit', submitHandler);
+      productForm.__submitHandler = submitHandler;
+
+    }catch(err){ console.error(err); productsList.innerHTML = '<div>Error loading products. See console.</div>'; }
+  }
+}
+
+/* ============ Init based on page ============= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // small UI init: mobile menu toggle
+  const menuToggle = document.getElementById('menu-toggle');
+  const mainNav = document.querySelector('.main-nav');
+  if(menuToggle) menuToggle.addEventListener('click', ()=> { if(mainNav) mainNav.style.display = (mainNav.style.display === 'flex' ? 'none' : 'flex'); });
+
+  // set copyright year in footer
+  const y = new Date().getFullYear();
+  const cy = document.getElementById('copy-year');
+  if(cy) cy.textContent = y;
+
+  if(page === 'index') initIndexPage();
+  if(page === 'admin') initAdminPage();
+});
