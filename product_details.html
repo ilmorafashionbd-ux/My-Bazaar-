@@ -1,45 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Details - Ilmora Fashion</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
-<body data-page="product-details">
-  <header class="topbar">
-    <div class="wrap">
-      <a class="logo" href="index.html">
-        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/logo.png" alt="Logo" />
-        <span>Ilmora Fashion</span>
-      </a>
-      <div class="actions">
-        <a class="btn small" href="admin.html" title="Admin (Login)">অ্যাডমিন</a>
-        <a id="cart-link" class="btn small" href="cart.html"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
-      </div>
-    </div>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="logo">Ilmora Fashion</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="admin.html">Admin</a>
+    </nav>
   </header>
 
-  <main class="wrap main">
-    <div id="product-details-container" class="card" style="margin-top:20px;">
-      <div style="text-align:center; padding: 20px;">
-        Loading product details...
-      </div>
+  <!-- Product Details -->
+  <section id="product-detail">
+    <div class="product-gallery">
+      <img id="mainProductImage" src="" alt="Product Image">
+      <div id="thumbnailContainer" class="thumbnail-row"></div>
     </div>
-  </main>
 
-  <footer class="footer">
-    <div class="wrap">
-      <div>© Ilmora Fashion</div>
-      <div>মোবাইল: 01778095805</div>
+    <div class="product-info">
+      <h1 id="productTitle"></h1>
+      <p id="productDescription"></p>
+      <p><strong>Price:</strong> <span id="productPrice"></span> BDT</p>
+      <button id="addToCartBtn">Add to Cart</button>
     </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Ilmora Fashion. All rights reserved.</p>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
