@@ -1,45 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ilmora Fashion</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Shop - Ilmora Fashion (Demo)</title>
 
-  <!-- Navigation -->
-  <header class="navbar">
-    <div class="logo">Ilmora Fashion</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="cart.html">Cart</a>
-      <a href="admin.html">Admin</a>
-    </nav>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body data-page="index">
+
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="index.html">
+        <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/logo.png" alt="Logo" />
+        <span>Ilmora Fashion</span>
+      </a>
+      <div class="actions">
+        <a class="btn small" href="admin.html" title="Admin (Login)">অ্যাডমিন</a>
+        <a id="cart-link" class="btn small" href="cart.html"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+      </div>
+    </div>
   </header>
 
-  <!-- Hero Banner -->
-  <section id="hero-banner">
-    <div class="banner-slider" id="bannerSlider"></div>
-  </section>
+  <main class="wrap main">
+    <section class="hero">
+      <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Hero banner">
+    </section>
 
-  <!-- Categories -->
-  <section id="categories">
-    <h2>Categories</h2>
-    <div id="categoryChips" class="category-chips"></div>
-  </section>
+    <section class="section">
+      <h2 class="section-title">পণ্য সমূহ</h2>
+      <div id="product-grid" class="product-grid">
+        </div>
+      <div id="no-products" style="display:none; padding: 20px; text-align:center;">কোনো পণ্য পাওয়া যায়নি।</div>
+    </section>
+  </main>
 
-  <!-- Product List -->
-  <section id="product-list">
-    <h2>All Products</h2>
-    <div id="productsContainer" class="products-grid"></div>
-  </section>
-
-  <!-- Footer -->
   <footer class="footer">
-    <p>© 2025 Ilmora Fashion. All rights reserved.</p>
+    <div class="wrap">
+      <div>© Ilmora Fashion</div>
+      <div>মোবাইল: 01778095805</div>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
