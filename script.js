@@ -71,7 +71,7 @@ function addToCart(p, redirect=true){
     const cart = getCart();
     const idx = cart.findIndex(i=> i.id === p.id);
     if(idx>=0){ cart[idx].qty = (cart[idx].qty||1)+1; }
-    else cart.push({ id:p.id, name:p.product_name, price: p.price, imageUrl: p.imageUrl, qty:1 });
+    else cart.push({ id:p.id, name:p.product_name, price: p.price, imageUrls: p.imageUrls, qty:1 });
     saveCart(cart);
     alert('প্রোডাক্ট কার্টে যুক্ত হয়েছে');
     if(redirect) {
@@ -104,8 +104,9 @@ async function initIndexPage(){
     products.forEach(p=>{
       const card = document.createElement('div');
       card.className = 'product-card';
+      const firstImage = (p.imageUrls && p.imageUrls.length > 0) ? p.imageUrls[0] : '';
       card.innerHTML = `
-        <img src="${escapeHtml(p.imageUrl||'')}" alt="${escapeHtml(p.product_name||'Product')}">
+        <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(p.product_name||'Product')}">
         <div class="card-body">
           <h4>${escapeHtml(p.product_name||'Unnamed')}</h4>
           <div class="small">${escapeHtml(p.category||'')}</div>
@@ -156,9 +157,24 @@ async function initProductDetailsPage(){
             return;
         }
         const p = { id: doc.id, ...doc.data() };
-        const html = `
+        
+        const mainImage = (p.imageUrls && p.imageUrls.length > 0) ? p.imageUrls[0] : '';
+        const galleryImages = (p.imageUrls && p.imageUrls.length > 1) ? p.imageUrls.slice(1) : [];
+        
+        let html = `
             <div style="display:flex;flex-direction:column;gap:16px">
-                <img src="${escapeHtml(p.imageUrl||'')}" style="width:100%;max-height:450px;object-fit:cover;border-radius:8px" alt="${escapeHtml(p.product_name)}">
+                <img id="main-product-image" src="${escapeHtml(mainImage)}" style="width:100%;max-height:450px;object-fit:cover;border-radius:8px" alt="${escapeHtml(p.product_name)}">
+        `;
+
+        if (galleryImages.length > 0) {
+            html += `<div id="image-gallery" style="display:flex;gap:10px;overflow-x:auto;">`;
+            galleryImages.forEach(imgUrl => {
+                html += `<img src="${escapeHtml(imgUrl)}" class="gallery-thumbnail" style="width:80px;height:80px;object-fit:cover;border-radius:6px;cursor:pointer;">`;
+            });
+            html += `</div>`;
+        }
+
+        html += `
                 <h2>${escapeHtml(p.product_name)}</h2>
                 <div class="small">SKU: ${escapeHtml(p.sku||'N/A')}</div>
                 <div class="price" style="font-size:24px">${escapeHtml(p.price||'0')}৳</div>
@@ -173,6 +189,13 @@ async function initProductDetailsPage(){
         
         $('#add-to-cart-btn').addEventListener('click', () => {
             addToCart(p);
+        });
+        
+        const mainProductImage = $('#main-product-image');
+        $$('.gallery-thumbnail', container).forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                mainProductImage.src = thumb.src;
+            });
         });
 
     } catch (err) {
@@ -197,8 +220,9 @@ function initCartPage(){
         let total=0;
         cart.forEach((it,idx)=>{
             total += (Number(it.price||0) * (it.qty||1));
+            const firstCartImage = (it.imageUrls && it.imageUrls.length > 0) ? it.imageUrls[0] : '';
             html += `<div class="cart-item">
-                <img src="${escapeHtml(it.imageUrl||'')}" alt="${escapeHtml(it.name)}">
+                <img src="${escapeHtml(firstCartImage)}" alt="${escapeHtml(it.name)}">
                 <div style="flex:1">
                     <div><strong>${escapeHtml(it.name)}</strong></div>
                     <div class="small">${escapeHtml(it.price)}৳ x ${escapeHtml(it.qty)}</div>
@@ -342,54 +366,6 @@ async function initAdminPage(){
   // signout
   if(signoutBtn) signoutBtn.addEventListener('click', ()=> auth.signOut());
 
-  // product add
-  if(productForm){
-    productForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const name = $('#p-name').value.trim();
-      const price = $('#p-price').value.trim();
-      const sku = $('#p-sku').value.trim();
-      const category = $('#p-category').value.trim();
-      const desc = $('#p-desc').value.trim();
-      const fileEl = $('#p-image');
-      if(!name || !price){
-        alert('প্রোডাক্ট নাম ও মূল্য দিন');
-        return;
-      }
-      let imageUrl = '';
-      if(fileEl && fileEl.files && fileEl.files[0]){
-        try{
-          imageUrl = await uploadToCloudinary(fileEl.files[0]);
-        }catch(err){
-          console.error(err);
-          alert('ছবি আপলোডে সমস্যা: ' + err.message);
-          return;
-        }
-      } else {
-        // optional: default placeholder
-        imageUrl = 'https://via.placeholder.com/600x400?text=No+Image';
-      }
-
-      try{
-        await db.collection('products').add({
-          product_name: name,
-          price: price,
-          sku: sku,
-          category: category,
-          description: desc,
-          imageUrl: imageUrl,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        alert('Product saved');
-        productForm.reset();
-        loadAdminProducts();
-      }catch(err){
-        console.error(err);
-        alert('Save error: ' + err.message);
-      }
-    });
-  }
-
   // clear form
   if(clearBtn) clearBtn.addEventListener('click', ()=> productForm.reset());
 
@@ -402,8 +378,9 @@ async function initAdminPage(){
       if(snap.empty){ productsList.innerHTML = '<div>No products yet.</div>'; return; }
       const html = snap.docs.map(doc=>{
         const d = doc.data();
+        const firstImage = (d.imageUrls && d.imageUrls.length > 0) ? d.imageUrls[0] : '';
         return `<div class="admin-product-row" data-id="${doc.id}">
-          <img src="${escapeHtml(d.imageUrl||'')}" alt="${escapeHtml(d.product_name||'')}">
+          <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(d.product_name||'')}">
           <div style="flex:1">
             <div><strong>${escapeHtml(d.product_name||'')}</strong></div>
             <div class="small">${escapeHtml(d.price||'')}৳ - ${escapeHtml(d.sku||'')}</div>
@@ -442,11 +419,8 @@ async function initAdminPage(){
           $('#p-sku').value = d.sku || '';
           $('#p-category').value = d.category || '';
           $('#p-desc').value = d.description || '';
-          // if wants to update image: select file and submit will upload and replace
-          // On update, we will call update path
-          // Replace submit handler to update instead of add (simple approach: delete then re-add)
-          if(confirm('Do you want to update this product? Press OK then submit the form to save changes (you can change image).')){
-            // temporary store doc id in form
+          
+          if(confirm('Do you want to update this product? Press OK then submit the form to save changes (you can change images).')){
             productForm.dataset.editId = id;
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
@@ -454,7 +428,6 @@ async function initAdminPage(){
       });
 
       // modify submit handler to support edit mode
-      // Remove any previous custom handler if exists
       try{ productForm.removeEventListener('submit', productForm.__submitHandler); }catch(e){}
       const submitHandler = async function(e){
         e.preventDefault();
@@ -465,32 +438,54 @@ async function initAdminPage(){
         const category = $('#p-category').value.trim();
         const desc = $('#p-desc').value.trim();
         const fileEl = $('#p-image');
-
-        let imageUrl = '';
-        if(fileEl && fileEl.files && fileEl.files[0]){
-          try{ imageUrl = await uploadToCloudinary(fileEl.files[0]); }catch(err){ alert('Upload failed'); return; }
+        
+        // New logic for multiple images
+        let imageUrls = [];
+        if (fileEl && fileEl.files && fileEl.files.length > 0) {
+            try {
+                const uploadPromises = Array.from(fileEl.files).map(file => uploadToCloudinary(file));
+                imageUrls = await Promise.all(uploadPromises);
+            } catch (err) {
+                alert('ছবি আপলোড করতে সমস্যা হয়েছে: ' + err.message);
+                return;
+            }
         }
+        
+        try {
+            const toSave = {
+                product_name: name,
+                price,
+                sku,
+                category,
+                description: desc
+            };
 
-        try{
-          if(editId){
-            // update doc
-            const toUpdate = { product_name: name, price, sku, category, description: desc };
-            if(imageUrl) toUpdate.imageUrl = imageUrl;
-            await db.collection('products').doc(editId).update(toUpdate);
-            alert('Updated');
-            delete productForm.dataset.editId;
-          } else {
-            // add new
-            if(!imageUrl) imageUrl = 'https://via.placeholder.com/600x400?text=No+Image';
-            await db.collection('products').add({
-              product_name: name, price, sku, category, description: desc, imageUrl,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert('Saved');
-          }
-          productForm.reset();
-          loadAdminProducts();
-        }catch(err){ console.error(err); alert('Save error: '+err.message); }
+            if(editId){
+                // Update existing document
+                const toUpdate = { ...toSave };
+                if (imageUrls.length > 0) {
+                    toUpdate.imageUrls = imageUrls;
+                }
+                await db.collection('products').doc(editId).update(toUpdate);
+                alert('Updated');
+                delete productForm.dataset.editId;
+            } else {
+                // Add new document
+                if (imageUrls.length > 0) {
+                    toSave.imageUrls = imageUrls;
+                } else {
+                    toSave.imageUrls = ['https://via.placeholder.com/600x400?text=No+Image'];
+                }
+                toSave.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('products').add(toSave);
+                alert('Saved');
+            }
+            productForm.reset();
+            loadAdminProducts();
+        } catch (err) {
+            console.error(err);
+            alert('Save error: ' + err.message);
+        }
       };
       productForm.addEventListener('submit', submitHandler);
       productForm.__submitHandler = submitHandler;
