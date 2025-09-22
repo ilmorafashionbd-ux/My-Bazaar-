@@ -104,6 +104,7 @@ async function initIndexPage(){
     products.forEach(p=>{
       const card = document.createElement('div');
       card.className = 'product-card';
+      // Use the first image from the imageUrls array
       const firstImage = (p.imageUrls && p.imageUrls.length > 0) ? p.imageUrls[0] : '';
       card.innerHTML = `
         <img src="${escapeHtml(firstImage)}" alt="${escapeHtml(p.product_name||'Product')}">
@@ -158,6 +159,7 @@ async function initProductDetailsPage(){
         }
         const p = { id: doc.id, ...doc.data() };
         
+        // Check for imageUrls array and use the first one as main, others as gallery
         const mainImage = (p.imageUrls && p.imageUrls.length > 0) ? p.imageUrls[0] : '';
         const galleryImages = (p.imageUrls && p.imageUrls.length > 1) ? p.imageUrls.slice(1) : [];
         
@@ -166,6 +168,7 @@ async function initProductDetailsPage(){
                 <img id="main-product-image" src="${escapeHtml(mainImage)}" style="width:100%;max-height:450px;object-fit:cover;border-radius:8px" alt="${escapeHtml(p.product_name)}">
         `;
 
+        // If there are multiple images, create a gallery
         if (galleryImages.length > 0) {
             html += `<div id="image-gallery" style="display:flex;gap:10px;overflow-x:auto;">`;
             galleryImages.forEach(imgUrl => {
@@ -191,6 +194,7 @@ async function initProductDetailsPage(){
             addToCart(p);
         });
         
+        // Add click listeners to gallery thumbnails to change the main image
         const mainProductImage = $('#main-product-image');
         $$('.gallery-thumbnail', container).forEach(thumb => {
             thumb.addEventListener('click', () => {
@@ -220,6 +224,7 @@ function initCartPage(){
         let total=0;
         cart.forEach((it,idx)=>{
             total += (Number(it.price||0) * (it.qty||1));
+            // Use the first image from the imageUrls array in cart
             const firstCartImage = (it.imageUrls && it.imageUrls.length > 0) ? it.imageUrls[0] : '';
             html += `<div class="cart-item">
                 <img src="${escapeHtml(firstCartImage)}" alt="${escapeHtml(it.name)}">
