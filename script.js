@@ -71,7 +71,7 @@ function addToCart(p, redirect=true){
     const cart = getCart();
     const idx = cart.findIndex(i=> i.id === p.id);
     if(idx>=0){ cart[idx].qty = (cart[idx].qty||1)+1; }
-    else cart.push({ id:p.id, name:p.product_name, price: p.price, imageUrl: (p.imageUrls && p.imageUrls[0]) || p.imageUrl, qty:1 });
+    else cart.push({ id:p.id, name:p.product_name, price: p.price, imageUrl: p.imageUrl, qty:1 });
     saveCart(cart);
     alert('প্রোডাক্ট কার্টে যুক্ত হয়েছে');
     if(redirect) {
@@ -105,7 +105,7 @@ async function initIndexPage(){
       const card = document.createElement('div');
       card.className = 'product-card';
       card.innerHTML = `
-        <img src="${escapeHtml(((p.imageUrls && p.imageUrls[0]) || p.imageUrls && (p.imageUrls && p.imageUrls[0]) || p.imageUrls[0]) || (p.imageUrls && p.imageUrls[0]) || p.imageUrl || '')}" alt="${escapeHtml(p.product_name||'Product')}">
+        <img src="${escapeHtml(p.imageUrl||'')}" alt="${escapeHtml(p.product_name||'Product')}">
         <div class="card-body">
           <h4>${escapeHtml(p.product_name||'Unnamed')}</h4>
           <div class="small">${escapeHtml(p.category||'')}</div>
@@ -158,7 +158,7 @@ async function initProductDetailsPage(){
         const p = { id: doc.id, ...doc.data() };
         const html = `
             <div style="display:flex;flex-direction:column;gap:16px">
-                <img src="${escapeHtml(((p.imageUrls && p.imageUrls[0]) || p.imageUrls && (p.imageUrls && p.imageUrls[0]) || p.imageUrls[0]) || (p.imageUrls && p.imageUrls[0]) || p.imageUrl || '')}" style="width:100%;max-height:450px;object-fit:cover;border-radius:8px" alt="${escapeHtml(p.product_name)}">
+                <img src="${escapeHtml(p.imageUrl||'')}" style="width:100%;max-height:450px;object-fit:cover;border-radius:8px" alt="${escapeHtml(p.product_name)}">
                 <h2>${escapeHtml(p.product_name)}</h2>
                 <div class="small">SKU: ${escapeHtml(p.sku||'N/A')}</div>
                 <div class="price" style="font-size:24px">${escapeHtml(p.price||'0')}৳</div>
@@ -170,12 +170,6 @@ async function initProductDetailsPage(){
             </div>
         `;
         container.innerHTML = html;
-        // wire gallery thumbs
-        setTimeout(()=>{
-          const thumbs = Array.from(document.querySelectorAll('.product-thumbs .thumb'));
-          const main = document.getElementById('main-prod-image');
-          thumbs.forEach(t=> t.addEventListener('click', ()=>{ if(main) main.src = t.src; }));
-        },50);
         
         $('#add-to-cart-btn').addEventListener('click', () => {
             addToCart(p);
@@ -221,12 +215,6 @@ function initCartPage(){
                 <button id="checkout-btn" class="btn">Checkout via WhatsApp</button>
             </div>`;
         container.innerHTML = html;
-        // wire gallery thumbs
-        setTimeout(()=>{
-          const thumbs = Array.from(document.querySelectorAll('.product-thumbs .thumb'));
-          const main = document.getElementById('main-prod-image');
-          thumbs.forEach(t=> t.addEventListener('click', ()=>{ if(main) main.src = t.src; }));
-        },50);
 
         // attach handlers
         container.querySelectorAll('button[data-op]').forEach(b=>{
