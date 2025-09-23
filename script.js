@@ -85,6 +85,37 @@ async function initIndexPage(){
   const noProducts = document.getElementById('no-products');
   updateCartCount();
 
+  // 📸 Banner Slider Logic
+  const slider = $('.slider-container');
+  const slides = $$('.slider-container img');
+  const prevBtn = $('.slider-btn.prev');
+  const nextBtn = $('.slider-btn.next');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    if (index >= slides.length) {
+      currentSlide = 0;
+    } else if (index < 0) {
+      currentSlide = slides.length - 1;
+    } else {
+      currentSlide = index;
+    }
+    const offset = -currentSlide * 100;
+    slider.style.transform = `translateX(${offset}%)`;
+  }
+
+  nextBtn.addEventListener('click', () => {
+    showSlide(currentSlide + 1);
+  });
+  prevBtn.addEventListener('click', () => {
+    showSlide(currentSlide - 1);
+  });
+
+  // Auto slide every 5 seconds
+  setInterval(() => {
+    showSlide(currentSlide + 1);
+  }, 5000);
+
   try{
     const snapshot = await db.collection('products').orderBy('createdAt','desc').get();
     if(snapshot.empty){
