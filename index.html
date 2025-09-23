@@ -28,9 +28,15 @@
   </header>
 
   <main class="wrap main">
-    <section class="hero">
-      <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Hero banner">
-    </section>
+    <section class="hero" style="position:relative; overflow:hidden;">
+  <div class="slider-container" style="display:flex; transition:transform 0.5s ease-in-out;">
+    <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner.jpg" alt="Hero banner 1" style="width:100%; object-fit:cover; flex-shrink:0;">
+    <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner2.jpg" alt="Hero banner 2" style="width:100%; object-fit:cover; flex-shrink:0;">
+    <img src="https://ilmorafashionbd-ux.github.io/My-Bazaar-/images/banner3.jpg" alt="Hero banner 3" style="width:100%; object-fit:cover; flex-shrink:0;">
+  </div>
+  <button class="slider-btn prev" style="position:absolute; top:50%; left:10px; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">&#10094;</button>
+  <button class="slider-btn next" style="position:absolute; top:50%; right:10px; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; padding:10px; cursor:pointer;">&#10095;</button>
+</section>
 
     <section class="section">
       <h2 class="section-title">পণ্য সমূহ</h2>
